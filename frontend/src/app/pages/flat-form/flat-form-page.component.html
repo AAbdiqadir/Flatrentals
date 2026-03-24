@@ -1,0 +1,14 @@
+<section class="page">
+  <h2>{{ flatId ? 'Edit Flat' : 'Create Flat' }}</h2>
+  <form [formGroup]="form" (ngSubmit)="submit()">
+    <input type="text" formControlName="address" placeholder="Address" />
+    <input type="text" formControlName="city" placeholder="City" />
+    <textarea rows="4" formControlName="description" placeholder="Description"></textarea>
+    <input type="number" formControlName="rentPrice" placeholder="Rent price" />
+    <input type="number" formControlName="rooms" placeholder="Rooms" />
+    <input type="number" formControlName="bathrooms" placeholder="Bathrooms" />
+    <label><input type="checkbox" formControlName="isAvailable" /> Available</label>
+    <input type="file" multiple (change)="onFilesChange($event)" />
+    <button type="submit">Save Flat</button>
+  </form>
+</section>

@@ -1,0 +1,27 @@
+<section class="page" *ngIf="flat">
+  <h2>{{ flat.address }}, {{ flat.city }}</h2>
+  <p>{{ flat.description }}</p>
+  <p><strong>${{ flat.rentPrice }}</strong> / month • {{ flat.rooms }} rooms • {{ flat.bathrooms || 0 }} baths</p>
+
+  <div class="images">
+    <img *ngFor="let img of flat.images" [src]="imageUrl(img)" alt="Flat image" />
+  </div>
+
+  <div class="panel" *ngIf="auth.role() === 'Tenant'">
+    <h3>Booking Request</h3>
+    <form [formGroup]="bookingForm" (ngSubmit)="createBooking()">
+      <input type="date" formControlName="startDate" />
+      <input type="date" formControlName="endDate" />
+      <input type="text" placeholder="Payment reference" formControlName="paymentReference" />
+      <button type="submit">Submit Booking</button>
+    </form>
+  </div>
+
+  <div class="panel" *ngIf="auth.isLoggedIn()">
+    <h3>Message Owner</h3>
+    <textarea #msg rows="4" placeholder="Write message"></textarea>
+    <button type="button" (click)="sendMessage(msg)">Send</button>
+  </div>
+
+  <p class="status" *ngIf="message">{{ message }}</p>
+</section>

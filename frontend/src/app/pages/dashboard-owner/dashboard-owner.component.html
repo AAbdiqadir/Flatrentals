@@ -1,0 +1,43 @@
+<section class="page">
+  <h2>Owner Dashboard</h2>
+
+  <div class="stats" *ngIf="summary">
+    <div>My flats: {{ summary.myFlatsCount }}</div>
+    <div>Booking requests: {{ summary.bookingRequestsCount }}</div>
+    <div>Messages: {{ summary.messagesCount }}</div>
+  </div>
+
+  <article class="panel">
+    <h3>My Flats</h3>
+    <a routerLink="/owner/flats/new">Add New Flat</a>
+    <table>
+      <tr><th>Address</th><th>Rent</th><th>Available</th><th>Actions</th></tr>
+      <tr *ngFor="let flat of flats">
+        <td>{{ flat.address }}, {{ flat.city }}</td>
+        <td>${{ flat.rentPrice }}</td>
+        <td>{{ flat.isAvailable ? 'Yes' : 'No' }}</td>
+        <td>
+          <a [routerLink]="['/owner/flats', flat.id, 'edit']">Edit</a>
+          <button (click)="deleteFlat(flat.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </article>
+
+  <article class="panel">
+    <h3>Incoming Booking Requests</h3>
+    <table>
+      <tr><th>Flat</th><th>Tenant</th><th>Dates</th><th>Status</th><th>Actions</th></tr>
+      <tr *ngFor="let b of bookings">
+        <td>{{ b.flatAddress }}</td>
+        <td>{{ b.tenantName }}</td>
+        <td>{{ b.startDate }} - {{ b.endDate }}</td>
+        <td>{{ b.status }}</td>
+        <td>
+          <button *ngIf="b.status === 'Pending'" (click)="setStatus(b.id, 'Approved')">Approve</button>
+          <button *ngIf="b.status === 'Pending'" (click)="setStatus(b.id, 'Rejected')">Reject</button>
+        </td>
+      </tr>
+    </table>
+  </article>
+</section>

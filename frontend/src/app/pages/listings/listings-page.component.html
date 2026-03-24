@@ -1,0 +1,12 @@
+<section class="page">
+  <h2>Available Flats</h2>
+  <div class="grid">
+    <article class="card" *ngFor="let flat of flats">
+      <img *ngIf="flat.images[0]" [src]="imageUrl(flat.images[0])" [alt]="flat.address" />
+      <h3>{{ flat.address }}, {{ flat.city }}</h3>
+      <p>{{ flat.description }}</p>
+      <p><strong>${{ flat.rentPrice }}</strong> / month • {{ flat.rooms }} rooms</p>
+      <a [routerLink]="['/listings', flat.id]">View details</a>
+    </article>
+  </div>
+</section>

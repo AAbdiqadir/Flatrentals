@@ -1,0 +1,9 @@
+/Users/ahmed_dahir/blazer/bckend/bin/Release/net9.0/publish/bckend
+/Users/ahmed_dahir/blazer/bckend/bin/Release/net9.0/publish/appsettings.Development.json
+/Users/ahmed_dahir/blazer/bckend/bin/Release/net9.0/publish/appsettings.json
+/Users/ahmed_dahir/blazer/bckend/bin/Release/net9.0/publish/bckend.dll
+/Users/ahmed_dahir/blazer/bckend/bin/Release/net9.0/publish/bckend.deps.json
+/Users/ahmed_dahir/blazer/bckend/bin/Release/net9.0/publish/bckend.runtimeconfig.json
+/Users/ahmed_dahir/blazer/bckend/bin/Release/net9.0/publish/bckend.pdb
+/Users/ahmed_dahir/blazer/bckend/bin/Release/net9.0/publish/Microsoft.AspNetCore.OpenApi.dll
+/Users/ahmed_dahir/blazer/bckend/bin/Release/net9.0/publish/Microsoft.OpenApi.dll

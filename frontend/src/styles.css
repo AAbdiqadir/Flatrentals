@@ -1,0 +1,4 @@
+* { box-sizing: border-box; }
+body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f6f7fb; }
+h1, h2, h3, p { margin: 0 0 8px; }
+button { cursor: pointer; }

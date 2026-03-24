@@ -1,0 +1,9 @@
+.auth-wrap { min-height: 85vh; display: grid; place-items: center; padding: 24px; }
+.card { width: min(460px, 100%); background: #fff; border: 1px solid #ddd; border-radius: 10px; padding: 20px; }
+.switch { display: flex; gap: 8px; margin: 12px 0; }
+.switch button { flex: 1; }
+.switch .active { background: #111; color: #fff; }
+form { display: grid; gap: 12px; }
+label { display: grid; gap: 6px; font-size: 14px; }
+input, select, button { padding: 10px; border: 1px solid #bbb; border-radius: 6px; }
+.error { color: #b00020; margin: 0; }

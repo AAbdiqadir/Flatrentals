@@ -1,0 +1,31 @@
+<section class="page">
+  <h2>Tenant Dashboard</h2>
+
+  <div class="stats" *ngIf="summary">
+    <div>Listings: {{ summary.listingsCount }}</div>
+    <div>Bookings: {{ summary.bookingsCount }}</div>
+    <div>Messages: {{ summary.messagesCount }}</div>
+  </div>
+
+  <article class="panel">
+    <h3>My Bookings</h3>
+    <table>
+      <tr><th>Flat</th><th>Dates</th><th>Status</th><th>Action</th></tr>
+      <tr *ngFor="let b of bookings">
+        <td>{{ b.flatAddress }}</td>
+        <td>{{ b.startDate }} - {{ b.endDate }}</td>
+        <td>{{ b.status }}</td>
+        <td><button *ngIf="b.status === 'Pending'" (click)="cancelBooking(b.id)">Cancel</button></td>
+      </tr>
+    </table>
+  </article>
+
+  <article class="panel">
+    <h3>My Profile</h3>
+    <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+      <input type="text" formControlName="fullName" placeholder="Full name" />
+      <input type="email" formControlName="email" placeholder="Email" />
+      <button type="submit">Save</button>
+    </form>
+  </article>
+</section>

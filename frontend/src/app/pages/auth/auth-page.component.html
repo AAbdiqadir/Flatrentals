@@ -1,0 +1,41 @@
+<section class="auth-wrap">
+  <div class="card">
+    <h1>Flat Rental Portal</h1>
+    <p>Login or create your account.</p>
+
+    <div class="switch">
+      <button type="button" [class.active]="mode === 'login'" (click)="setMode('login')">Login</button>
+      <button type="button" [class.active]="mode === 'register'" (click)="setMode('register')">Register</button>
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <label *ngIf="mode === 'register'">
+        Full name
+        <input type="text" formControlName="fullName" />
+      </label>
+
+      <label>
+        Email
+        <input type="email" formControlName="email" />
+      </label>
+
+      <label>
+        Password
+        <input type="password" formControlName="password" />
+      </label>
+
+      <label *ngIf="mode === 'register'">
+        Register as
+        <select formControlName="role">
+          <option value="Tenant">Tenant</option>
+          <option value="Owner">Owner</option>
+        </select>
+      </label>
+
+      <p class="error" *ngIf="error">{{ error }}</p>
+      <button type="submit">{{ mode === 'login' ? 'Sign In' : 'Create Account' }}</button>
+    </form>
+
+    <small>Default users are available in README.</small>
+  </div>
+</section>

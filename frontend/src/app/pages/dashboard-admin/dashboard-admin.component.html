@@ -1,0 +1,63 @@
+<section class="page">
+  <h2>Admin Dashboard</h2>
+
+  <div class="stats" *ngIf="summary">
+    <div>Users: {{ summary.usersCount }}</div>
+    <div>Flats: {{ summary.flatsCount }}</div>
+    <div>Bookings: {{ summary.bookingsCount }}</div>
+    <div>Messages: {{ summary.messagesCount }}</div>
+  </div>
+
+  <article class="panel">
+    <h3>Users</h3>
+    <table>
+      <tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr>
+      <tr *ngFor="let user of users">
+        <td>{{ user.fullName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+          <button (click)="startEdit(user)">Edit</button>
+          <button (click)="deleteUser(user.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+
+    <form *ngIf="editUserId" [formGroup]="userForm" (ngSubmit)="saveUser()" class="edit-form">
+      <input type="text" formControlName="fullName" placeholder="Full name" />
+      <input type="email" formControlName="email" placeholder="Email" />
+      <select formControlName="role">
+        <option value="Admin">Admin</option>
+        <option value="Owner">Owner</option>
+        <option value="Tenant">Tenant</option>
+      </select>
+      <button type="submit">Save user</button>
+    </form>
+  </article>
+
+  <article class="panel">
+    <h3>All Flats</h3>
+    <table>
+      <tr><th>Address</th><th>Owner</th><th>Rent</th><th>Action</th></tr>
+      <tr *ngFor="let flat of flats">
+        <td>{{ flat.address }}, {{ flat.city }}</td>
+        <td>{{ flat.ownerName }}</td>
+        <td>${{ flat.rentPrice }}</td>
+        <td><button (click)="deleteFlat(flat.id)">Delete</button></td>
+      </tr>
+    </table>
+  </article>
+
+  <article class="panel">
+    <h3>All Bookings</h3>
+    <table>
+      <tr><th>Flat</th><th>Tenant</th><th>Status</th><th>Action</th></tr>
+      <tr *ngFor="let booking of bookings">
+        <td>{{ booking.flatAddress }}</td>
+        <td>{{ booking.tenantName }}</td>
+        <td>{{ booking.status }}</td>
+        <td><button (click)="deleteBooking(booking.id)">Delete</button></td>
+      </tr>
+    </table>
+  </article>
+</section>

@@ -1,0 +1,64 @@
+[
+  {
+    "address": "101 Pine Street",
+    "city": "Seattle",
+    "description": "Bright 1-bedroom apartment with city view and close access to transit.",
+    "rentPrice": 1750,
+    "rooms": 1,
+    "bathrooms": 1,
+    "isAvailable": true,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1494526585095-c41746248156",
+      "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85"
+    ]
+  },
+  {
+    "address": "22 Oak Avenue",
+    "city": "Austin",
+    "description": "Modern 2-bedroom flat with balcony and in-unit laundry.",
+    "rentPrice": 2200,
+    "rooms": 2,
+    "bathrooms": 2,
+    "isAvailable": true,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1484154218962-a197022b5858",
+      "https://images.unsplash.com/photo-1507089947368-19c1da9775ae"
+    ]
+  },
+  {
+    "address": "8 Lakeview Drive",
+    "city": "Chicago",
+    "description": "Spacious 3-bedroom unit near parks, schools, and shopping.",
+    "rentPrice": 2650,
+    "rooms": 3,
+    "bathrooms": 2,
+    "isAvailable": true,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688"
+    ]
+  },
+  {
+    "address": "77 Sunset Boulevard",
+    "city": "Los Angeles",
+    "description": "Stylish studio with open floor plan and updated kitchen.",
+    "rentPrice": 1950,
+    "rooms": 1,
+    "bathrooms": 1,
+    "isAvailable": true,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1493666438817-866a91353ca9"
+    ]
+  },
+  {
+    "address": "305 River Road",
+    "city": "Denver",
+    "description": "Cozy 2-bedroom flat in a quiet neighborhood with mountain views.",
+    "rentPrice": 2100,
+    "rooms": 2,
+    "bathrooms": 1,
+    "isAvailable": false,
+    "imageUrls": [
+      "https://images.unsplash.com/photo-1493809842364-78817add7ffb"
+    ]
+  }
+]

@@ -1,0 +1,7 @@
+.page { padding: 20px; }
+.images { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 10px; margin: 10px 0; }
+img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; }
+.panel { border: 1px solid #ddd; padding: 12px; border-radius: 8px; margin-top: 10px; background: #fff; }
+form { display: grid; gap: 8px; }
+input, textarea, button { padding: 10px; border: 1px solid #bbb; border-radius: 6px; }
+.status { color: #1b5e20; }
