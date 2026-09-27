@@ -10,12 +10,21 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - ConnectionStrings__DefaultConnection=Data Source=/app/data/flatrental.db
-      - CompreFace__BaseUrl=http://host.docker.internal:8000
-      - CompreFace__RecognitionApiKey=PASTE_YOUR_COMPREFACE_RECOGNITION_API_KEY
-      - CompreFace__MinimumSimilarity=0.93
+
     volumes:
       - backend_uploads:/app/wwwroot/uploads
       - backend_data:/app/data
+    restart: unless-stopped
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: flatrent-frontend:latest
+    container_name: flatrent-frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend
     restart: unless-stopped
 
 volumes:
