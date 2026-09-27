@@ -290,3 +290,5 @@
 /Users/ahmed_dahir/Flatrentals/bckend/obj/Debug/net8.0/bckend.pdb
 /Users/ahmed_dahir/Flatrentals/bckend/obj/Debug/net8.0/bckend.genruntimeconfig.cache
 /Users/ahmed_dahir/Flatrentals/bckend/obj/Debug/net8.0/ref/bckend.dll
+/Users/ahmed_dahir/Flatrentals/bckend/obj/Debug/net8.0/bckend.sourcelink.json
+/Users/ahmed_dahir/Flatrentals/bckend/obj/Debug/net8.0/swae.build.ex.cache

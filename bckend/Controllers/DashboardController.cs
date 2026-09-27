@@ -8,7 +8,7 @@ namespace bckend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize]
+
 public class DashboardController(AppDbContext dbContext) : ControllerBase
 {
     [HttpGet("tenant")]
