@@ -1,0 +1,95 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: flatrent
+spec:
+  replicas: 1
+
+  # Appropriate for a single-writer SQLite database.
+  strategy:
+    type: Recreate
+
+  selector:
+    matchLabels:
+      app: backend
+
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+        - name: backend
+          image: aabdiqadir/flatrent-backend:1.0.0
+          imagePullPolicy: IfNotPresent
+
+          ports:
+            - name: http
+              containerPort: 8080
+
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+
+            - name: ASPNETCORE_URLS
+              value: http://+:8080
+
+            - name: ConnectionStrings__DefaultConnection
+              value: "Data Source=/app/data/flatrental.db"
+
+            - name: Jwt__Key
+              valueFrom:
+                secretKeyRef:
+                  name: flatrent-secrets
+                  key: jwt-key
+
+          volumeMounts:
+            - name: database
+              mountPath: /app/data
+
+            - name: uploads
+              mountPath: /app/wwwroot/uploads
+
+          readinessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 5
+
+          livenessProbe:
+            tcpSocket:
+              port: http
+            initialDelaySeconds: 30
+            periodSeconds: 10
+
+          resources:
+            requests:
+              memory: 128Mi
+              cpu: 100m
+            limits:
+              memory: 512Mi
+              cpu: 500m
+
+      volumes:
+        - name: database
+          persistentVolumeClaim:
+            claimName: backend-data
+
+        - name: uploads
+          persistentVolumeClaim:
+            claimName: backend-uploads
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  namespace: flatrent
+spec:
+  type: ClusterIP
+  selector:
+    app: backend
+  ports:
+    - name: http
+      port: 8080
+      targetPort: http
