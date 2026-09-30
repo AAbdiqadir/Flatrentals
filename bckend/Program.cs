@@ -39,9 +39,11 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+// Configure PostgreSQL database context and Identity
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-
+    options.UseNpgsql(
+        builder.Configuration.GetConnectionString("DefaultConnection"),
+        postgresOptions => postgresOptions.EnableRetryOnFailure()));
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
         options.Password.RequireDigit = true;

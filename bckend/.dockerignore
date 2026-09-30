@@ -3,3 +3,4 @@ obj/
 flatrental.db*
 wwwroot/uploads/
 .git/
+.env

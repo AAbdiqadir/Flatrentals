@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "CDtHZo+3RIE=",
+  "dgSpecHash": "yTKSELRUuaQ=",
   "success": true,
   "projectFilePath": "/Users/ahmed_dahir/Flatrentals/bckend/bckend.csproj",
   "expectedPackageFiles": [
@@ -16,14 +16,11 @@
     "/Users/ahmed_dahir/.nuget/packages/microsoft.codeanalysis.csharp/4.5.0/microsoft.codeanalysis.csharp.4.5.0.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.codeanalysis.csharp.workspaces/4.5.0/microsoft.codeanalysis.csharp.workspaces.4.5.0.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.codeanalysis.workspaces.common/4.5.0/microsoft.codeanalysis.workspaces.common.4.5.0.nupkg.sha512",
-    "/Users/ahmed_dahir/.nuget/packages/microsoft.data.sqlite.core/8.0.8/microsoft.data.sqlite.core.8.0.8.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.entityframeworkcore/8.0.8/microsoft.entityframeworkcore.8.0.8.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.entityframeworkcore.abstractions/8.0.8/microsoft.entityframeworkcore.abstractions.8.0.8.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.entityframeworkcore.analyzers/8.0.8/microsoft.entityframeworkcore.analyzers.8.0.8.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.entityframeworkcore.design/8.0.8/microsoft.entityframeworkcore.design.8.0.8.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.entityframeworkcore.relational/8.0.8/microsoft.entityframeworkcore.relational.8.0.8.nupkg.sha512",
-    "/Users/ahmed_dahir/.nuget/packages/microsoft.entityframeworkcore.sqlite/8.0.8/microsoft.entityframeworkcore.sqlite.8.0.8.nupkg.sha512",
-    "/Users/ahmed_dahir/.nuget/packages/microsoft.entityframeworkcore.sqlite.core/8.0.8/microsoft.entityframeworkcore.sqlite.core.8.0.8.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.extensions.apidescription.server/6.0.5/microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.extensions.caching.abstractions/11.0.0-rc.1.26425.128/microsoft.extensions.caching.abstractions.11.0.0-rc.1.26425.128.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.extensions.caching.memory/11.0.0-rc.1.26425.128/microsoft.extensions.caching.memory.11.0.0-rc.1.26425.128.nupkg.sha512",
@@ -45,10 +42,8 @@
     "/Users/ahmed_dahir/.nuget/packages/microsoft.identitymodel.tokens/7.1.2/microsoft.identitymodel.tokens.7.1.2.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.openapi/1.6.14/microsoft.openapi.1.6.14.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/mono.texttemplating/2.2.1/mono.texttemplating.2.2.1.nupkg.sha512",
-    "/Users/ahmed_dahir/.nuget/packages/sqlitepclraw.bundle_e_sqlite3/2.1.6/sqlitepclraw.bundle_e_sqlite3.2.1.6.nupkg.sha512",
-    "/Users/ahmed_dahir/.nuget/packages/sqlitepclraw.core/2.1.6/sqlitepclraw.core.2.1.6.nupkg.sha512",
-    "/Users/ahmed_dahir/.nuget/packages/sqlitepclraw.lib.e_sqlite3/2.1.6/sqlitepclraw.lib.e_sqlite3.2.1.6.nupkg.sha512",
-    "/Users/ahmed_dahir/.nuget/packages/sqlitepclraw.provider.e_sqlite3/2.1.6/sqlitepclraw.provider.e_sqlite3.2.1.6.nupkg.sha512",
+    "/Users/ahmed_dahir/.nuget/packages/npgsql/8.0.4/npgsql.8.0.4.nupkg.sha512",
+    "/Users/ahmed_dahir/.nuget/packages/npgsql.entityframeworkcore.postgresql/8.0.8/npgsql.entityframeworkcore.postgresql.8.0.8.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/swashbuckle.aspnetcore/6.7.3/swashbuckle.aspnetcore.6.7.3.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/swashbuckle.aspnetcore.swagger/6.7.3/swashbuckle.aspnetcore.swagger.6.7.3.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.7.3/swashbuckle.aspnetcore.swaggergen.6.7.3.nupkg.sha512",
@@ -74,9 +69,9 @@
     "/Users/ahmed_dahir/.nuget/packages/system.text.json/8.0.4/system.text.json.8.0.4.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/system.threading.channels/6.0.0/system.threading.channels.6.0.0.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/system.threading.tasks.extensions/4.6.3/system.threading.tasks.extensions.4.6.3.nupkg.sha512",
+    "/Users/ahmed_dahir/.nuget/packages/microsoft.netcore.app.ref/8.0.31/microsoft.netcore.app.ref.8.0.31.nupkg.sha512",
     "/Users/ahmed_dahir/.nuget/packages/microsoft.aspnetcore.app.ref/8.0.31/microsoft.aspnetcore.app.ref.8.0.31.nupkg.sha512",
-    "/Users/ahmed_dahir/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.31/microsoft.netcore.app.host.osx-arm64.8.0.31.nupkg.sha512",
-    "/Users/ahmed_dahir/.nuget/packages/microsoft.netcore.app.ref/8.0.31/microsoft.netcore.app.ref.8.0.31.nupkg.sha512"
+    "/Users/ahmed_dahir/.nuget/packages/microsoft.netcore.app.host.osx-arm64/8.0.31/microsoft.netcore.app.host.osx-arm64.8.0.31.nupkg.sha512"
   ],
   "logs": []
 }
