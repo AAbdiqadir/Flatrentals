@@ -29,7 +29,7 @@ public class JwtTokenService(IConfiguration configuration)
             issuer: configuration["Jwt:Issuer"],
             audience: configuration["Jwt:Audience"],
             claims: claims,
-            expires: DateTime.UtcNow.AddHours(8),
+           expires: DateTime.UtcNow.AddMinutes(configuration.GetValue("Jwt:AccessTokenMinutes", 30)),
             signingCredentials: credentials
         );
 

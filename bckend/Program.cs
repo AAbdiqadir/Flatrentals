@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -90,12 +91,26 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.AddHealthChecks()
+    .AddDbContextCheck<AppDbContext>("database", tags: ["ready"]);
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<SeedService>();
 builder.Services.Configure<CompreFaceOptions>(builder.Configuration.GetSection("CompreFace"));
 builder.Services.AddHttpClient<IFaceRecognitionService, CompreFaceRecognitionService>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
+
+app.MapHealthChecks("/health/live", new HealthCheckOptions
+{
+    Predicate = _ => false
+});
+
+app.MapHealthChecks("/health/ready", new HealthCheckOptions
+{
+    Predicate = check => check.Tags.Contains("ready")
+});
+
 var isEfDesignTime =
     Environment.CommandLine.Contains("ef.dll", StringComparison.OrdinalIgnoreCase) ||
     AppDomain.CurrentDomain.GetAssemblies().Any(a => a.GetName().Name == "Microsoft.EntityFrameworkCore.Design");
@@ -110,15 +125,38 @@ app.UseStaticFiles();
 app.UseCors("frontend");
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseExceptionHandler();
 
 app.MapControllers();
 
-
 if (!isEfDesignTime)
 {
-    using var scope = app.Services.CreateScope();
-    var seeder = scope.ServiceProvider.GetRequiredService<SeedService>();
-    await seeder.SeedAsync();
+    var shouldSeedDemoData =
+        builder.Configuration.GetValue<bool>("Seed:DemoData");
+
+    if (shouldSeedDemoData && !app.Environment.IsDevelopment())
+    {
+        throw new InvalidOperationException(
+            "Demo data seeding can only run in Development.");
+    }
+
+    if (app.Environment.IsDevelopment())
+    {
+        using var scope = app.Services.CreateScope();
+
+        var dbContext = scope.ServiceProvider
+            .GetRequiredService<AppDbContext>();
+
+        await dbContext.Database.MigrateAsync();
+
+        if (shouldSeedDemoData)
+        {
+            var seeder = scope.ServiceProvider
+                .GetRequiredService<SeedService>();
+
+            await seeder.SeedAsync();
+        }
+    }
 
     app.Run();
 }

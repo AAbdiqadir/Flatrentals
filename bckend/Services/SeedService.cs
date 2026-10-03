@@ -16,7 +16,7 @@ public class SeedService(
 
     public async Task SeedAsync()
     {
-        await dbContext.Database.MigrateAsync();
+       // await dbContext.Database.MigrateAsync();
         await SeedRolesAsync();
         var users = await SeedUsersAsync();
         await SeedFlatsFromJsonAsync(users.Owner.Id);

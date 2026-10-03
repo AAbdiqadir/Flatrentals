@@ -78,6 +78,7 @@ DTOs/
  Flats/FlatDtos.cs
  Messages/MessageDtos.cs
  Users/UserDtos.cs
+Interfaces/IImageStorage.cs
 Migrations/
  20260930123217_InitialPostgres.cs
  20260930123217_InitialPostgres.Designer.cs
@@ -114,12 +115,7 @@ Microsoft.NETCore.App.Ref
  microsoft.entityframeworkcore.abstractions/8.0.8/lib/net8.0/Microsoft.EntityFrameworkCore.Abstractions.dll
  microsoft.entityframeworkcore.relational/8.0.8/lib/net8.0/Microsoft.EntityFrameworkCore.Relational.dll
  microsoft.entityframeworkcore/8.0.8/lib/net8.0/Microsoft.EntityFrameworkCore.dll
- microsoft.extensions.caching.abstractions/11.0.0-rc.1.26425.128/lib/netstandard2.0/Microsoft.Extensions.Caching.Abstractions.dll
- microsoft.extensions.caching.memory/11.0.0-rc.1.26425.128/lib/netstandard2.0/Microsoft.Extensions.Caching.Memory.dll
- microsoft.extensions.dependencyinjection.abstractions/11.0.0-rc.1.26425.128/lib/netstandard2.1/Microsoft.Extensions.DependencyInjection.Abstractions.dll
- microsoft.extensions.logging.abstractions/11.0.0-rc.1.26425.128/lib/netstandard2.0/Microsoft.Extensions.Logging.Abstractions.dll
- microsoft.extensions.options/11.0.0-rc.1.26425.128/lib/netstandard2.1/Microsoft.Extensions.Options.dll
- microsoft.extensions.primitives/11.0.0-rc.1.26425.128/lib/netstandard2.0/Microsoft.Extensions.Primitives.dll
+ microsoft.extensions.diagnostics.healthchecks.entityframeworkcore/8.0.8/lib/net8.0/Microsoft.Extensions.Diagnostics.HealthChecks.EntityFrameworkCore.dll
  microsoft.identitymodel.abstractions/7.1.2/lib/net8.0/Microsoft.IdentityModel.Abstractions.dll
  microsoft.identitymodel.jsonwebtokens/7.1.2/lib/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
  microsoft.identitymodel.logging/7.1.2/lib/net8.0/Microsoft.IdentityModel.Logging.dll
@@ -132,7 +128,6 @@ Microsoft.NETCore.App.Ref
  swashbuckle.aspnetcore.swagger/6.7.3/lib/net8.0/Swashbuckle.AspNetCore.Swagger.dll
  swashbuckle.aspnetcore.swaggergen/6.7.3/lib/net8.0/Swashbuckle.AspNetCore.SwaggerGen.dll
  swashbuckle.aspnetcore.swaggerui/6.7.3/lib/net8.0/Swashbuckle.AspNetCore.SwaggerUI.dll
- system.diagnostics.diagnosticsource/11.0.0-rc.1.26425.128/lib/netstandard2.0/System.Diagnostics.DiagnosticSource.dll
  system.identitymodel.tokens.jwt/7.1.2/lib/net8.0/System.IdentityModel.Tokens.Jwt.dll
 
 [analyzerReferences]
@@ -151,8 +146,6 @@ Microsoft.NETCore.App.Ref
   Microsoft.CodeAnalysis.Analyzers.dll
   Microsoft.CodeAnalysis.CSharp.Analyzers.dll
  microsoft.entityframeworkcore.analyzers/8.0.8/analyzers/dotnet/cs/Microsoft.EntityFrameworkCore.Analyzers.dll
- microsoft.extensions.logging.abstractions/11.0.0-rc.1.26425.128/analyzers/dotnet/roslyn4.4/cs/Microsoft.Extensions.Logging.Generators.dll
- microsoft.extensions.options/11.0.0-rc.1.26425.128/analyzers/dotnet/roslyn4.4/cs/Microsoft.Extensions.Options.SourceGeneration.dll
 
 [sdkAnalyzerConfigPolicy]
 Microsoft.NET.Sdk/analyzers

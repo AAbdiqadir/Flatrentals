@@ -11,6 +11,7 @@ namespace bckend.Controllers;
 [Route("api/[controller]")]
 public class AuthController(
     UserManager<ApplicationUser> userManager,
+    SignInManager<ApplicationUser> signInManager,
     JwtTokenService jwtTokenService) : ControllerBase
 {
     [HttpPost("register")]
@@ -62,6 +63,8 @@ public class AuthController(
     public async Task<ActionResult<AuthResponseDto>> Login(LoginRequestDto request)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
+        
+        
         if (user is null || !await userManager.CheckPasswordAsync(user, request.Password))
         {
             return Unauthorized("Invalid credentials.");
