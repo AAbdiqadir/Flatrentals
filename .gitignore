@@ -1,0 +1,30 @@
+# Secrets
+.env
+.env.*
+!.env.example
+**/appsettings.Production.json
+k8s/secret.yaml
+
+# .NET
+**/bin/
+**/obj/
+
+# Databases
+*.db
+*.db-shm
+*.db-wal
+
+# User uploads
+**/wwwroot/uploads/*
+!**/wwwroot/uploads/.gitkeep
+
+# Angular
+**/node_modules/
+**/dist/
+**/.angular/
+coverage/
+
+# IDE and operating system
+.DS_Store
+.idea/
+.vscode/
