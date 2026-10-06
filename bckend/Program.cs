@@ -134,13 +134,16 @@ if (!isEfDesignTime)
     var shouldSeedDemoData =
         builder.Configuration.GetValue<bool>("Seed:DemoData");
 
+    var shouldMigrate =
+        builder.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup");
+
     if (shouldSeedDemoData && !app.Environment.IsDevelopment())
     {
         throw new InvalidOperationException(
             "Demo data seeding can only run in Development.");
     }
 
-    if (app.Environment.IsDevelopment())
+    if (shouldMigrate)
     {
         using var scope = app.Services.CreateScope();
 
@@ -148,14 +151,16 @@ if (!isEfDesignTime)
             .GetRequiredService<AppDbContext>();
 
         await dbContext.Database.MigrateAsync();
+    }
 
-        if (shouldSeedDemoData)
-        {
-            var seeder = scope.ServiceProvider
-                .GetRequiredService<SeedService>();
+    if (app.Environment.IsDevelopment() && shouldSeedDemoData)
+    {
+        using var scope = app.Services.CreateScope();
 
-            await seeder.SeedAsync();
-        }
+        var seeder = scope.ServiceProvider
+            .GetRequiredService<SeedService>();
+
+        await seeder.SeedAsync();
     }
 
     app.Run();
