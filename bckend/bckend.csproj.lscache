@@ -102,6 +102,7 @@ Services/
  JwtTokenService.cs
  SeedService.cs
 Program.cs
+test.cs
 
 [frameworkPacks]
 Microsoft.AspNetCore.App.Ref
