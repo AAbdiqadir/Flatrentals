@@ -84,11 +84,11 @@ jobs:
     environment: production
 
     env:
-      VPS_HOST: ${{ secrets.VPS_HOST }}
-      VPS_USER: ${{ secrets.VPS_USER }}
-      VPS_SSH_PRIVATE_KEY: ${{ secrets.VPS_SSH_PRIVATE_KEY }}
+      VPS_HOST: ${{ secrets.VPSHOST }}
+      VPS_USER: ${{ secrets.VPSNAME }}
+      VPS_SSH_PRIVATE_KEY: ${{ secrets.SSHPRIVATEKEY }}
       VPS_KNOWN_HOSTS: ${{ secrets.VPS_KNOWN_HOSTS }}
-      VPS_PORT: ${{ vars.VPS_PORT || '22' }}
+      VPS_PORT: ${{ vars.VPSPORT || '22' }}
       VPS_DEPLOY_PATH: ${{ vars.VPS_DEPLOY_PATH || '/opt/flatrentals' }}
 
     steps:
