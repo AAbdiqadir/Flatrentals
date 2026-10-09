@@ -25,7 +25,7 @@ services:
       Jwt__Key: ${JWT_KEY}
       Jwt__Issuer: FlatRentalApi
       Jwt__Audience: FlatRentalApp
-      AllowedHosts: ${DOMAIN}
+      AllowedHosts: ${DOMAIN};backend;localhost
       CompreFace__BaseUrl: ${COMPREFACE_BASE_URL}
       CompreFace__RecognitionApiKey: ${COMPREFACE_RECOGNITION_API_KEY}
     volumes:
