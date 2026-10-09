@@ -15,8 +15,8 @@ k8s/secret.yaml
 *.db-wal
 
 # User uploads
-**/wwwroot/uploads/*
-!**/wwwroot/uploads/.gitkeep
+# **/wwwroot/uploads/*
+# !**/wwwroot/uploads/.gitkeep
 
 # Angular
 **/node_modules/
