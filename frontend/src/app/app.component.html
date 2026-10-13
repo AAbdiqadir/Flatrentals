@@ -1,5 +1,5 @@
 <header class="topbar">
-  <button class="brand" (click)="goHomeByRole()">visionglideplatforms</button>
+  <button class="brand" (click)="goHomeByRole()">FlatRental</button>
   <nav>
     <a routerLink="/listings">Listings</a>
     <a *ngIf="auth.role() === 'Tenant'" routerLink="/tenant/dashboard">Tenant Dashboard</a>
