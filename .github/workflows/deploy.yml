@@ -1,10 +1,15 @@
 name: CI/CD
 
 on:
-  pull_request:
-    branches: [main]
   push:
-    branches: [main]
+    branches:
+      - develop
+      - main
+
+  pull_request:
+    branches:
+      - main
+
   workflow_dispatch:
 
 permissions:
@@ -77,7 +82,7 @@ jobs:
 
   deploy:
     name: Deploy to production VPS
-    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     needs: [backend, frontend, compose]
     runs-on: ubuntu-latest
     timeout-minutes: 20
