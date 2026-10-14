@@ -1,0 +1,33 @@
+<section
+  id="pricing"
+  class="section container pricing-section"
+  aria-labelledby="pricing-title"
+>
+  <div class="section-intro">
+    <h2 id="pricing-title">The right fit.<br />At every stage.</h2>
+    <p>
+      Simple plans are on the way.<br /><span class="inline-note"
+        >Illustrative structure. Pricing and inclusions are not yet
+        confirmed.</span
+      >
+    </p>
+  </div>
+  <div class="pricing-grid">
+    @for (plan of plans; track plan.name) {
+      <article class="plan">
+        <h3>{{ plan.name }}</h3>
+        <p>{{ plan.purpose }}</p>
+        <div class="plan-price">Pricing to be announced</div>
+        <p class="plan-label">Intended business outcomes</p>
+        <ul>
+          @for (item of plan.items; track item) {
+            <li><app-icon name="check" />{{ item }}</li>
+          }
+        </ul>
+        <a routerLink="/get-started" class="button button-outline"
+          >Explore {{ plan.name }} <app-icon name="arrow"
+        /></a>
+      </article>
+    }
+  </div>
+</section>

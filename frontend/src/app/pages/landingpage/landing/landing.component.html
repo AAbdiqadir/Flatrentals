@@ -1,0 +1,128 @@
+<a class="skip-link" href="#main-content">Skip to content</a>
+<app-header />
+<main id="main-content">
+  <section class="hero container" aria-labelledby="hero-title">
+    <h1 id="hero-title">
+      Your business is growing.<br /><span>Your website should too.</span>
+    </h1>
+    <p class="hero-description">
+      Create a professional online presence built to evolve with your business —
+      from your first launch to your next big milestone.
+    </p>
+    <div class="hero-actions">
+      <a routerLink="/get-started" class="button button-dark"
+        >Get started <app-icon name="arrow" /></a
+      ><a routerLink="/" fragment="product" class="button button-outline"
+        >Explore the platform</a
+      >
+    </div>
+    <p class="availability">
+      <span class="status-dot" aria-hidden="true"></span> A new home for your
+      business. Currently in development.
+    </p>
+    <div id="product" class="hero-preview">
+      <app-preview />
+    </div>
+    <p class="preview-caption">
+      A preview of what’s ahead. Example businesses and editor tools are
+      illustrative.
+    </p>
+    <div class="audience-line">
+      <span>For the people building what’s next.</span>
+      <div>
+        <span>Independent businesses</span><span>New ventures</span
+        ><span>Growing teams</span>
+      </div>
+    </div>
+  </section>
+
+  <section
+    class="value-section section container"
+    aria-labelledby="value-title"
+  >
+    <div class="section-intro">
+      <h2 id="value-title">More business.<br />Less website overhead.</h2>
+      <p>
+        Your website should move your business forward. Vision Glide is being built to
+        bring creating, launching, and managing your online presence into one
+        considered experience.
+      </p>
+    </div>
+    <div class="value-columns">
+      <article>
+        <app-icon name="spark" />
+        <h3>Show up professionally.</h3>
+        <p>
+          Give your business a home that reflects the care you put into your
+          work.
+        </p>
+      </article>
+      <article>
+        <app-icon name="page" />
+        <h3>Make room for change.</h3>
+        <p>
+          A new service. A new direction. Your website should have room for your
+          next chapter.
+        </p>
+      </article>
+      <article>
+        <app-icon name="globe" />
+        <h3>Keep the bigger picture.</h3>
+        <p>
+          Spend your attention on your business, with a clearer path for your
+          online presence.
+        </p>
+      </article>
+    </div>
+  </section>
+
+  <app-features />
+
+  <section
+    id="how-it-works"
+    class="section container how-section"
+    aria-labelledby="steps-title"
+  >
+    <div class="section-intro">
+      <h2 id="steps-title">
+        From your first idea<br />to your next milestone.
+      </h2>
+      <p>
+        A simple path, designed around you.<br /><span class="inline-note"
+          >Our planned three-step experience.</span
+        >
+      </p>
+    </div>
+    <ol class="steps">
+      @for (step of steps; track step.title; let i = $index) {
+        <li>
+          <span class="step-number">{{ i + 1 }}</span>
+          <h3>{{ step.title }}</h3>
+          <p>{{ step.text }}</p>
+        </li>
+      }
+    </ol>
+  </section>
+
+  <app-benefits />
+
+  <app-pricing />
+
+  <app-faq />
+
+  <section class="final-section" aria-labelledby="final-title">
+    <div class="container">
+      <h2 id="final-title">Your next chapter<br />deserves a great website.</h2>
+      <p>
+        You’re building something worth sharing.<br />Give it a home that can
+        grow with you.
+      </p>
+      <a routerLink="/get-started" class="button button-light"
+        >Get started <app-icon name="arrow" /></a
+      ><span class="final-note"
+        >The platform is in development. Account access is coming soon.</span
+      >
+    </div>
+  </section>
+</main>
+<app-footer />

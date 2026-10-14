@@ -1,0 +1,207 @@
+.hero {
+  text-align: center;
+  padding-top: 82px;
+}
+.hero h1 {
+  font-size: clamp(38px, 5.2vw, 72px);
+  line-height: 1.12;
+  letter-spacing: -0.04em;
+  font-weight: 600;
+  margin: 0;
+}
+.hero h1 span {
+  color: var(--color-muted);
+}
+.hero-description {
+  font-size: 16px;
+  max-width: 540px;
+  margin: 26px auto 0;
+  line-height: 1.85;
+}
+.hero-actions {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+.availability {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  font-size: 11px;
+  margin: 18px 0 44px;
+  color: var(--color-muted);
+}
+.hero-preview {
+  max-width: 1024px;
+  margin: auto;
+  scroll-margin-top: 25px;
+}
+.preview-caption {
+  font-size: 11px;
+  margin: 20px 0;
+  color: var(--color-muted);
+}
+.audience-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  margin: 44px auto 0;
+  padding-bottom: 38px;
+  border-bottom: 1px solid var(--color-border);
+  max-width: 1024px;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+.audience-line > div {
+  display: flex;
+  gap: 34px;
+  color: var(--color-ink);
+  font-weight: 600;
+}
+.value-columns {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 64px;
+}
+.value-columns app-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--color-green);
+  margin-bottom: 14px;
+}
+.value-columns p {
+  font-size: 14px;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 52px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border: 1px solid var(--color-border);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 22px;
+}
+.steps p {
+  font-size: 14px;
+}
+.plan-price {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 30px 0;
+}
+.final-section {
+  background: var(--color-ink);
+  color: var(--color-white);
+  text-align: center;
+  padding-block: 80px;
+}
+.final-section h2 {
+  font-size: clamp(34px, 4vw, 52px);
+  line-height: 1.16;
+}
+.final-section p {
+  color: var(--color-dark-muted);
+  font-size: 14px;
+  margin: 22px 0 28px;
+}
+.final-note {
+  display: block;
+  color: var(--color-dark-muted);
+  font-size: 10px;
+  margin-top: 18px;
+}
+@media (max-width: 900px) {
+  .value-columns,
+  .steps {
+    gap: 30px;
+  }
+  .audience-line > div {
+    gap: 18px;
+  }
+}
+@media (max-width: 700px) {
+  .hero {
+    padding-top: 52px;
+  }
+  .hero h1 {
+    font-size: clamp(30px, 7.4vw, 46px);
+  }
+  .hero-description {
+    font-size: 14px;
+  }
+  .availability {
+    font-size: 10px;
+    margin-bottom: 32px;
+  }
+  .hero-actions .button {
+    font-size: 12px;
+    padding: 0 18px;
+  }
+  .audience-line {
+    display: block;
+    text-align: center;
+    margin-top: 30px;
+  }
+  .audience-line > div {
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px 20px;
+    margin-top: 18px;
+    font-size: 11px;
+  }
+  .value-columns,
+  .steps {
+    grid-template-columns: 1fr;
+    gap: 26px;
+  }
+  .value-columns article {
+    max-width: 440px;
+  }
+  .steps li {
+    position: relative;
+    padding-left: 52px;
+  }
+  .step-number {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  .plan-price {
+    margin: 22px 0;
+  }
+  .final-section {
+    padding-block: 60px;
+  }
+  .preview-caption {
+    font-size: 10px;
+  }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .hero-preview {
+    animation: preview-arrive 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+  @keyframes preview-arrive {
+    from {
+      transform: translateY(12px);
+      clip-path: inset(0 0 8px 0 round 14px);
+    }
+    to {
+      transform: translateY(0);
+      clip-path: inset(0 round 14px);
+    }
+  }
+}

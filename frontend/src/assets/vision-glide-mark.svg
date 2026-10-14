@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 32" fill="none">
+  <title>Vision Glide</title>
+  <desc>An eagle in precise forward flight, with swept feathered wings, a focused gaze, and a streamlined tail.</desc>
+  <path d="M24 19L12 14L1 13L9 18L5 18L13 22L21 23L28 20Z" fill="#20291f"/>
+  <path d="M17 18L3 3L18 9L14 9L23 13L19 13L27 17C28.5 14 30 12 32 12H34L36 14H39L37 17H34C32 17 31 20 28 21L21 23L13 24L3 28L7 22L2 21L12 19Z" fill="#426349"/>
+  <path d="M29 19L25 21L17 23L13 24L3 28L7 22L2 21L12 19L17 18L22 20Z" fill="#20291f"/>
+  <circle cx="33.5" cy="14.5" r=".65" fill="#fafbf8"/>
+</svg>
