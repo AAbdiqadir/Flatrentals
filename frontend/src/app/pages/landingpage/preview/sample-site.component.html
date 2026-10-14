@@ -1,0 +1,28 @@
+<div class="sample-site" [class.mobile-preview]="mobile">
+  <div class="sample-nav">
+    <span>{{ example.brand }}</span
+    ><span class="sample-nav-links"
+      >About &nbsp;&nbsp; Work &nbsp;&nbsp; Contact</span
+    >
+  </div>
+  <div class="sample-content">
+    <div class="sample-copy">
+      <h2>{{ example.headline }}</h2>
+      <p class="sample-description">{{ example.description }}</p>
+      <span class="sample-link"
+        >{{ example.link }} <app-icon name="arrow"
+      /></span>
+    </div>
+    <div class="sample-art" aria-hidden="true">
+      <div class="art-arch">
+        <div class="art-ring"></div>
+        <span>{{ example.initials }}</span>
+      </div>
+      <span class="art-caption">Made with intention.</span>
+    </div>
+  </div>
+  <div class="sample-bottom">
+    <span>Small beginnings. Lasting impressions.</span
+    ><span aria-hidden="true">{{ example.brand }}</span>
+  </div>
+</div>

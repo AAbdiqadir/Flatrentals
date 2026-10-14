@@ -1,0 +1,69 @@
+<div
+  class="preview"
+  [style.--preview-bg]="example().color"
+  [style.--preview-accent]="example().accent"
+  [style.--preview-ink]="example().ink"
+>
+  <div class="browser-bar">
+    <div class="traffic-lights" aria-hidden="true"><i></i><i></i><i></i></div>
+    <span class="browser-title">Your next website</span
+    ><span class="concept-label">Concept preview</span>
+  </div>
+  <div class="editor-toolbar">
+    <span class="editor-brand"
+      ><app-brand [compact]="true" /><span class="project-name">
+        / My website</span
+      ></span
+    >
+    <div class="device-controls" role="group" aria-label="Preview width">
+      <button
+        type="button"
+        aria-label="Desktop preview"
+        [attr.aria-pressed]="!mobile()"
+        (click)="mobile.set(false)"
+      >
+        <app-icon name="desktop" /></button
+      ><button
+        type="button"
+        aria-label="Mobile preview"
+        [attr.aria-pressed]="mobile()"
+        (click)="mobile.set(true)"
+      >
+        <app-icon name="mobile" />
+      </button>
+    </div>
+    <span class="draft-label"><i aria-hidden="true"></i> Draft concept</span>
+  </div>
+  <div class="editor-body">
+    <aside class="editor-sidebar" aria-label="Illustrative editor tools">
+      <span class="sidebar-label">Your website</span>
+      <div class="sidebar-active"><app-icon name="page" /> Pages</div>
+      <div><app-icon name="palette" /> Design</div>
+      <div><app-icon name="globe" /> Settings</div>
+      <hr />
+      <span class="sidebar-label">Pages</span>
+      <div class="page-active">Home <span aria-hidden="true">/</span></div>
+      <div>About</div>
+      <div>Contact</div>
+      <p class="sidebar-foot">A little idea.<br />A whole new chapter.</p>
+    </aside>
+    <div class="canvas">
+      <app-sample-site [example]="example()" [mobile]="mobile()" />
+    </div>
+  </div>
+  <div
+    class="preview-selector"
+    role="group"
+    aria-label="Example business website"
+  >
+    @for (example of examples; track example.label; let i = $index) {
+      <button
+        type="button"
+        [attr.aria-pressed]="selected() === i"
+        (click)="selected.set(i)"
+      >
+        {{ example.label }}
+      </button>
+    }
+  </div>
+</div>

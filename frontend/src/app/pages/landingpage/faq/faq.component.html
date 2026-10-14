@@ -1,0 +1,18 @@
+<section
+  id="faq"
+  class="section container faq-section"
+  aria-labelledby="faq-title"
+>
+  <div>
+    <h2 id="faq-title">Good questions.<br />Clear answers.</h2>
+    <p>Here’s what to know<br />before your next step.</p>
+  </div>
+  <div class="faq-list">
+    @for (faq of faqs; track faq.question) {
+      <details>
+        <summary>{{ faq.question }}<app-icon name="plus" /></summary>
+        <p>{{ faq.answer }}</p>
+      </details>
+    }
+  </div>
+</section>
