@@ -1,0 +1,111 @@
+.features-section {
+  background: var(--color-soft);
+}
+.feature-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 100px;
+  align-items: center;
+}
+.feature-list article {
+  padding: 22px 0;
+  border-bottom: 1px solid var(--color-border);
+}
+.feature-list article:first-child {
+  padding-top: 0;
+}
+.feature-list article:last-child {
+  border: 0;
+}
+.feature-list p {
+  font-size: 14px;
+  max-width: 350px;
+}
+.structure-preview {
+  background: var(--color-white);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.structure-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 20px 24px;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 12px;
+  font-weight: 600;
+}
+.structure-content {
+  padding: 28px;
+}
+.structure-heading {
+  font-size: 30px;
+  line-height: 1.3;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  margin-bottom: 26px;
+}
+.structure-row {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 17px 0;
+  border-top: 1px solid var(--color-border);
+}
+.structure-row strong,
+.structure-row small {
+  display: block;
+}
+.structure-row strong {
+  font-size: 12px;
+  font-weight: 600;
+}
+.structure-row small {
+  font-size: 10px;
+  color: var(--color-muted);
+  margin-top: 4px;
+}
+.structure-row app-icon {
+  margin-left: auto;
+  width: 15px;
+  color: var(--color-green);
+}
+.structure-swatch {
+  width: 34px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: 4px;
+}
+.swatch-hero {
+  background: var(--color-sage);
+}
+.swatch-about {
+  background: var(--color-sand);
+}
+.swatch-contact {
+  background: var(--color-sky);
+}
+.structure-foot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--color-muted);
+  border-top: 1px solid var(--color-border);
+  padding-top: 20px;
+}
+@media (max-width: 900px) {
+  .feature-layout {
+    gap: 40px;
+  }
+}
+@media (max-width: 700px) {
+  .feature-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+  .structure-content {
+    padding: 24px;
+  }
+}
