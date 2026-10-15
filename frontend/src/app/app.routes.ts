@@ -27,15 +27,35 @@ export const routes: Routes = [
     data: { action: 'signup' },
     title: 'Get started — Vision Glide',
   },
-  {
-    path: 'login',
-    loadComponent: () =>
-      import('./pages/landingpage/integration/integration.component').then(
-        (m) => m.IntegrationComponent,
-      ),
-    data: { action: 'login' },
-    title: 'Log in — Vision Glide',
+  { path: 'login', component: AuthPageComponent },
+
+    {
+    path: 'tenant/dashboard',
+    component: DashboardTenantComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Tenant'] },
   },
+  {
+    path: 'owner/dashboard',
+    component: DashboardOwnerComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Owner', 'Admin'] },
+  },
+  {
+    path: 'admin/dashboard',
+    component: DashboardAdminComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Admin'] },
+  },
+  // {
+  //   path: 'login2',
+  //   loadComponent: () =>
+  //     import('./pages/landingpage/integration/integration.component').then(
+  //       (m) => m.IntegrationComponent,
+  //     ),
+  //   data: { action: 'login' },
+  //   title: 'Log in — Vision Glide',
+  // },
   { path: '**', redirectTo: '' },
 ];
 
