@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
-
+import { ActivatedRoute } from '@angular/router';
 @Component({
   selector: 'app-auth-page',
   standalone: true,
@@ -22,11 +22,17 @@ export class AuthPageComponent {
     role: ['Tenant']
   });
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
-    if (this.router.url.includes('/register')) {
-      this.mode = 'register';
-    }
-  }
+  constructor(
+  private fb: FormBuilder,
+  private auth: AuthService,
+  private router: Router,
+  route: ActivatedRoute,
+) {
+  this.mode =
+    route.snapshot.data['mode'] === 'register'
+      ? 'register'
+      : 'login';
+}
 
   submit() {
     this.error = '';
