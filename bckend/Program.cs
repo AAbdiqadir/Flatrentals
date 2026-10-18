@@ -137,14 +137,14 @@ if (!isEfDesignTime)
     var shouldSeedDemoData =
         builder.Configuration.GetValue<bool>("Seed:DemoData");
 
-    var shouldMigrate =
-        builder.Configuration.GetValue<bool>("Database:ApplyMigrationsOnStartup");
+    var migrateOnly = args.Contains(
+    "--migrate-only",
+    StringComparer.OrdinalIgnoreCase);
 
-    if (shouldSeedDemoData && !app.Environment.IsDevelopment())
-    {
-        throw new InvalidOperationException(
-            "Demo data seeding can only run in Development.");
-    }
+    var shouldMigrate =
+        migrateOnly ||
+        builder.Configuration.GetValue<bool>(
+            "Database:ApplyMigrationsOnStartup");
 
     if (shouldMigrate)
     {
@@ -155,6 +155,18 @@ if (!isEfDesignTime)
 
         await dbContext.Database.MigrateAsync();
     }
+
+    if (migrateOnly)
+    {
+        return;
+}
+    if (shouldSeedDemoData && !app.Environment.IsDevelopment())
+    {
+        throw new InvalidOperationException(
+            "Demo data seeding can only run in Development.");
+    }
+
+    
 
     if (app.Environment.IsDevelopment() && shouldSeedDemoData)
     {
