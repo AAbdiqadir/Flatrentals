@@ -9,7 +9,11 @@ namespace bckend.Services;
 
 public class JwtTokenService(IConfiguration configuration)
 {
-    public string CreateToken(ApplicationUser user, IList<string> roles)
+    public TimeSpan AccessTokenLifetime =>
+        TimeSpan.FromMinutes(
+            configuration.GetValue("Jwt:AccessTokenMinutes", 30));
+
+    public string CreateToken(ApplicationUser user, IList<string> roles, DateTime? expiresAt = null)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"] ?? throw new InvalidOperationException("Missing Jwt:Key")));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -17,6 +21,7 @@ public class JwtTokenService(IConfiguration configuration)
         var claims = new List<Claim>
         {
             new(JwtRegisteredClaimNames.Sub, user.Id),
+            new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             new(JwtRegisteredClaimNames.Email, user.Email ?? string.Empty),
             new(ClaimTypes.NameIdentifier, user.Id),
             new(ClaimTypes.Name, user.FullName),
@@ -29,7 +34,7 @@ public class JwtTokenService(IConfiguration configuration)
             issuer: configuration["Jwt:Issuer"],
             audience: configuration["Jwt:Audience"],
             claims: claims,
-           expires: DateTime.UtcNow.AddMinutes(configuration.GetValue("Jwt:AccessTokenMinutes", 30)),
+            expires: expiresAt ?? DateTime.UtcNow.Add(AccessTokenLifetime),
             signingCredentials: credentials
         );
 

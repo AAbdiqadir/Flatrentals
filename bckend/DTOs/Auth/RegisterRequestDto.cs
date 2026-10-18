@@ -15,4 +15,5 @@ public class RegisterRequestDto
 
     [Required]
     public string Role { get; set; } = "Tenant";
+    public bool RememberMe { get; set; }
 }

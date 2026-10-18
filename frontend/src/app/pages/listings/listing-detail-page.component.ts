@@ -6,11 +6,12 @@ import { ApiService } from '../../core/api.service';
 import { AuthService } from '../../core/auth.service';
 import { Flat } from '../../models/types';
 import { environment } from '../../../environments/environment';
+import { HeaderComponent } from '../landingpage/shared/header.component';
 
 @Component({
   selector: 'app-listing-detail-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,HeaderComponent],
   templateUrl: './listing-detail-page.component.html',
   styleUrl: './listing-detail-page.component.css'
 })

@@ -19,7 +19,7 @@ services:
     image: flatrent-backend:${APP_VERSION}
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-      Database__ApplyMigrationsOnStartup: "true"
+
       ConnectionStrings__DefaultConnection: >-
         Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       Jwt__Key: ${JWT_KEY}

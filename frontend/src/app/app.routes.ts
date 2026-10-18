@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
 import { roleGuard } from './core/role.guard';
+import { guestGuard } from './core/guest.guard';
 import { AuthPageComponent } from './pages/auth/auth-page.component';
 import { ListingDetailPageComponent } from './pages/listings/listing-detail-page.component';
 import { ListingsPageComponent } from './pages/listings/listings-page.component';
@@ -9,25 +10,39 @@ import { DashboardOwnerComponent } from './pages/dashboard-owner/dashboard-owner
 import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin.component';
 import { FlatFormPageComponent } from './pages/flat-form/flat-form-page.component';
 import { LandingComponent } from './pages/landingpage/landing/landing.component';
+import { IntegrationComponent } from './pages/landingpage/integration/integration.component';
+
 
 
 export const routes: Routes = [
 
   {
     path: '',
+    pathMatch: 'full',
     component: LandingComponent,
     title: 'Vision Glide — Build a website that grows with your business',
   },
+  { path: 'login', component: AuthPageComponent, canActivate: [guestGuard] },
   {
-    path: 'get-started',
-    loadComponent: () =>
-      import('./pages/landingpage/integration/integration.component').then(
-        (m) => m.IntegrationComponent,
-      ),
-    data: { action: 'signup' },
-    title: 'Get started — Vision Glide',
+    path: 'register',
+    component: AuthPageComponent,
+    canActivate: [guestGuard],
+    data: { mode: 'register' },
   },
-  { path: 'login', component: AuthPageComponent },
+  { path: 'listings', component: ListingsPageComponent },
+  { path: 'listings/:id', component: ListingDetailPageComponent },
+  {
+    path: 'owner/flats/new',
+    component: FlatFormPageComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Owner', 'Admin'] },
+  },
+  {
+    path: 'owner/flats/:id/edit',
+    component: FlatFormPageComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Owner', 'Admin'] },
+  },
 
     {
     path: 'tenant/dashboard',
@@ -47,15 +62,15 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['Admin'] },
   },
-  // {
-  //   path: 'login2',
-  //   loadComponent: () =>
-  //     import('./pages/landingpage/integration/integration.component').then(
-  //       (m) => m.IntegrationComponent,
-  //     ),
-  //   data: { action: 'login' },
-  //   title: 'Log in — Vision Glide',
-  // },
+  {
+    path: 'get-started',
+    loadComponent: () =>
+      import('./pages/landingpage/integration/integration.component').then(
+        (m) => m.IntegrationComponent,
+      ),
+    data: { action: 'signup' },
+    title: 'Get started — Vision Glide',
+  },
   { path: '**', redirectTo: '' },
 ];
 

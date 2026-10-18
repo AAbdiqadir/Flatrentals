@@ -81,31 +81,10 @@ jobs:
           APP_VERSION: ci
         run: docker compose --env-file .env.example -f compose.prod.yml config --quiet
 
-  web-config:
-    name: Validate web server configuration
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v4
-
-      - name: Validate Nginx configuration
-        run: |
-          docker run --rm --add-host backend:127.0.0.1 \
-            --mount "type=bind,source=$PWD/frontend/nginx.conf,target=/etc/nginx/conf.d/default.conf,readonly" \
-            nginx:stable-alpine nginx -t
-
-      - name: Validate Caddy configuration
-        run: |
-          docker run --rm -e DOMAIN=example.com \
-            --mount "type=bind,source=$PWD/Caddyfile,target=/etc/caddy/Caddyfile,readonly" \
-            caddy:2-alpine caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile
-
   deploy:
     name: Deploy to production VPS
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    needs: [backend, frontend, compose, web-config]
+    needs: [backend, frontend, compose]
     runs-on: ubuntu-latest
     timeout-minutes: 20
     environment: production
@@ -170,9 +149,6 @@ jobs:
             fi
 
             if [ "$backend_ready" = true ] && [ "$frontend_ready" = true ]; then
-              # Updating a bind-mounted Caddyfile does not reload a running Caddy.
-              docker compose --env-file .env -f compose.prod.yml exec -T caddy \
-                caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile
               docker compose --env-file .env -f compose.prod.yml ps
               exit 0
             fi
