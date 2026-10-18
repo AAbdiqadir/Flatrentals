@@ -74,7 +74,8 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
         ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = signingKey
+        IssuerSigningKey = signingKey,
+        ClockSkew = TimeSpan.Zero
     };
 });
 
@@ -87,7 +88,8 @@ builder.Services.AddCors(options =>
         policy
             .WithOrigins("http://localhost:4200")
             .AllowAnyHeader()
-            .AllowAnyMethod();
+            .AllowAnyMethod()
+            .AllowCredentials();
     });
 });
 
@@ -95,6 +97,7 @@ builder.Services.AddHealthChecks()
     .AddDbContextCheck<AppDbContext>("database", tags: ["ready"]);
 builder.Services.AddScoped<JwtTokenService>();
 builder.Services.AddScoped<SeedService>();
+builder.Services.AddScoped<AuthSessionService>();
 builder.Services.Configure<CompreFaceOptions>(builder.Configuration.GetSection("CompreFace"));
 builder.Services.AddHttpClient<IFaceRecognitionService, CompreFaceRecognitionService>();
 builder.Services.AddProblemDetails();

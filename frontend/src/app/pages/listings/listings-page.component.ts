@@ -4,11 +4,12 @@ import { RouterLink } from '@angular/router';
 import { ApiService } from '../../core/api.service';
 import { Flat } from '../../models/types';
 import { environment } from '../../../environments/environment';
+import { HeaderComponent } from '../landingpage/shared/header.component';
 
 @Component({
   selector: 'app-listings-page',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink, HeaderComponent],
   templateUrl: './listings-page.component.html',
   styleUrl: './listings-page.component.css'
 })

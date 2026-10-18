@@ -1,22 +1,31 @@
 using bckend.DTOs.Auth;
 using bckend.Models;
+using bckend.Filters;
 using bckend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Cryptography;
+using System.Text;
+using bckend.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace bckend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[SessionRequest]
 public class AuthController(
     UserManager<ApplicationUser> userManager,
     SignInManager<ApplicationUser> signInManager,
-    JwtTokenService jwtTokenService) : ControllerBase
+    JwtTokenService jwtTokenService,
+    AuthSessionService sessions
+    ) : ControllerBase
 {
     [HttpPost("register")]
     [AllowAnonymous]
-    public async Task<ActionResult<AuthResponseDto>> Register(RegisterRequestDto request)
+    public async Task<ActionResult<AuthResponseDto>> Register(RegisterRequestDto request,
+    CancellationToken ct)
     {
         var role = request.Role.Trim();
         if (!new[] { "Tenant", "Owner" }.Contains(role, StringComparer.OrdinalIgnoreCase))
@@ -48,38 +57,56 @@ public class AuthController(
         var roles = await userManager.GetRolesAsync(user);
         var token = jwtTokenService.CreateToken(user, roles);
 
-        return Ok(new AuthResponseDto
-        {
-            Token = token,
-            UserId = user.Id,
-            Email = user.Email ?? string.Empty,
-            FullName = user.FullName,
-            Role = roles.FirstOrDefault() ?? string.Empty
-        });
+        return Ok(await sessions.StartAsync(
+            HttpContext,
+            user,
+            request.RememberMe,
+            ct));
     }
 
     [HttpPost("login")]
     [AllowAnonymous]
-    public async Task<ActionResult<AuthResponseDto>> Login(LoginRequestDto request)
+    public async Task<ActionResult<AuthResponseDto>> Login(
+        LoginRequestDto request,
+        CancellationToken ct)
     {
         var user = await userManager.FindByEmailAsync(request.Email);
-        
-        
-        if (user is null || !await userManager.CheckPasswordAsync(user, request.Password))
-        {
+
+        if (user is null)
             return Unauthorized("Invalid credentials.");
-        }
 
-        var roles = await userManager.GetRolesAsync(user);
-        var token = jwtTokenService.CreateToken(user, roles);
+        var result = await signInManager.CheckPasswordSignInAsync(
+            user,
+            request.Password,
+            lockoutOnFailure: true);
 
-        return Ok(new AuthResponseDto
-        {
-            Token = token,
-            UserId = user.Id,
-            Email = user.Email ?? string.Empty,
-            FullName = user.FullName,
-            Role = roles.FirstOrDefault() ?? string.Empty
-        });
+        if (!result.Succeeded)
+            return Unauthorized("Invalid credentials.");
+
+        return Ok(await sessions.StartAsync(
+            HttpContext,
+            user,
+            request.RememberMe,
+            ct));
+    }
+    [HttpPost("refresh")]
+    [AllowAnonymous]
+    public async Task<ActionResult<AuthResponseDto>> Refresh(
+        CancellationToken ct)
+    {
+        var response = await sessions.RefreshAsync(HttpContext, ct);
+
+        if (response is null)
+            return Unauthorized("Session expired. Please sign in again.");
+
+        return Ok(response);
+    }
+
+    [HttpPost("logout")]
+    [AllowAnonymous]
+    public async Task<IActionResult> Logout(CancellationToken ct)
+    {
+        await sessions.EndAsync(HttpContext, ct);
+        return NoContent();
     }
 }

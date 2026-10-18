@@ -1,1 +1,22 @@
-<router-outlet />
+<!-- <header class="topbar">
+  <button class="brand" (click)="goHomeByRole()">FlatRental</button>
+  <nav>
+    <a routerLink="/listings">Listings</a>
+    <a *ngIf="auth.role() === 'Tenant'" routerLink="/tenant/dashboard">Tenant Dashboard</a>
+    <a *ngIf="auth.role() === 'Owner'" routerLink="/owner/dashboard">Owner Dashboard</a>
+    <a *ngIf="auth.role() === 'Admin'" routerLink="/admin/dashboard">Admin Dashboard</a>
+    <a *ngIf="!auth.isLoggedIn()" routerLink="/login">Login</a>
+    <button
+  *ngIf="auth.isLoggedIn()"
+  [disabled]="auth.isSigningOut()"
+  (click)="auth.logout()"
+>
+  {{ auth.isSigningOut() ? 'Signing out…' : 'Logout' }}
+</button>
+  </nav>
+</header>
+
+<main>
+  <router-outlet></router-outlet>
+</main> -->
+<router-outlet></router-outlet>

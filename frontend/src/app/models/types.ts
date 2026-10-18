@@ -4,6 +4,8 @@ export interface AuthResponse {
   email: string;
   fullName: string;
   role: 'Admin' | 'Owner' | 'Tenant';
+  expiresAt: string;
+
 }
 
 export interface Flat {

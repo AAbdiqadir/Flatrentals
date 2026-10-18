@@ -10,7 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
     public DbSet<FlatImage> FlatImages => Set<FlatImage>();
     public DbSet<Booking> Bookings => Set<Booking>();
     public DbSet<Message> Messages => Set<Message>();
-
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
@@ -54,5 +54,23 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : IdentityDbCo
             .WithMany()
             .HasForeignKey(m => m.RecipientId)
             .OnDelete(DeleteBehavior.Restrict);
+
+        builder.Entity<RefreshToken>(entity =>
+        {
+            entity.Property(t => t.TokenHash)
+                .IsRequired()
+                .HasMaxLength(64);
+
+            entity.HasIndex(t => t.TokenHash).IsUnique();
+            entity.HasIndex(t => t.FamilyId);
+
+            entity.Property(t => t.RevokedAt)
+                .IsConcurrencyToken();
+
+            entity.HasOne(t => t.User)
+                .WithMany()
+                .HasForeignKey(t => t.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+        });
     }
 }
