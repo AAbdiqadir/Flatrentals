@@ -131,9 +131,20 @@ jobs:
 
           export APP_VERSION="$commit_sha"
 
+          # Build the images from the checked-out commit.
           docker compose --env-file .env -f compose.prod.yml build --pull
-          docker compose --env-file .env -f compose.prod.yml up -d --remove-orphans
 
+          # Ensure PostgreSQL is healthy.
+          docker compose --env-file .env -f compose.prod.yml \
+            up -d --wait postgres
+
+          # Apply pending migrations using the new backend image.
+          docker compose --env-file .env -f compose.prod.yml \
+            run --rm --no-deps backend --migrate-only
+
+          # Start the updated application.
+          docker compose --env-file .env -f compose.prod.yml \
+            up -d --remove-orphans
           for attempt in $(seq 1 12); do
             backend_ready=false
             frontend_ready=false
