@@ -8,26 +8,32 @@ import { DashboardTenantComponent } from './pages/dashboard-tenant/dashboard-ten
 import { DashboardOwnerComponent } from './pages/dashboard-owner/dashboard-owner.component';
 import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin.component';
 import { FlatFormPageComponent } from './pages/flat-form/flat-form-page.component';
-import { LandingComponent } from './pages/landingpage/landing/landing.component';
+
 
 
 export const routes: Routes = [
 
   {
     path: '',
-    component: LandingComponent,
+    component: ListingsPageComponent,
     title: 'Vision Glide — Build a website that grows with your business',
   },
-  {
-    path: 'get-started',
-    loadComponent: () =>
-      import('./pages/landingpage/integration/integration.component').then(
-        (m) => m.IntegrationComponent,
-      ),
-    data: { action: 'signup' },
-    title: 'Get started — Vision Glide',
-  },
   { path: 'login', component: AuthPageComponent },
+  { path: 'register', component: AuthPageComponent, data: { mode: 'register' } },
+  { path: 'listings', component: ListingsPageComponent },
+  { path: 'listings/:id', component: ListingDetailPageComponent },
+  {
+    path: 'owner/flats/new',
+    component: FlatFormPageComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Owner', 'Admin'] },
+  },
+  {
+    path: 'owner/flats/:id/edit',
+    component: FlatFormPageComponent,
+    canActivate: [authGuard, roleGuard],
+    data: { roles: ['Owner', 'Admin'] },
+  },
 
     {
     path: 'tenant/dashboard',

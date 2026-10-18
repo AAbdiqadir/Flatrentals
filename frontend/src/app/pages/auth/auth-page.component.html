@@ -1,3 +1,4 @@
+
 <section class="auth-wrap">
   <div class="card">
     <h1>Flat Rental Portal</h1>
@@ -31,10 +32,19 @@
           <option value="Owner">Owner</option>
         </select>
       </label>
+      <label class="remember-me"> <input type="checkbox" formControlName="rememberMe" />
+        Remember me for 7 days
+      </label>
+      <p role="alert" *ngIf="auth.sessionError()">
+      {{ auth.sessionError() }}
+      </p>
 
       <p class="error" *ngIf="error">{{ error }}</p>
+      
+        
       <button type="submit">{{ mode === 'login' ? 'Sign In' : 'Create Account' }}</button>
     </form>
+
 
     <small>Default users are available in README.</small>
   </div>

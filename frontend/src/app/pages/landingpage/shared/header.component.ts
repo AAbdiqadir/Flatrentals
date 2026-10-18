@@ -65,9 +65,7 @@ export class HeaderComponent {
     { id: 'features', label: 'Features' },
     { id: 'how-it-works', label: 'How it works' },
     { id: 'pricing', label: 'Pricing' },
-    { id: 'flat', label: 'FAQ' },
-    { id: 'contact', label: 'Contact' },
-    
+    { id: 'faq', label: 'FAQ' },
   ];
   @HostListener('document:keydown.escape') closeMenu() {
     if (!this.menuOpen()) return;
