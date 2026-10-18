@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { ApiService } from '../../core/api.service';
 import { Booking, Flat } from '../../models/types';
+import { HeaderComponent } from '../landingpage/shared/header.component';
 
 @Component({
   selector: 'app-dashboard-owner',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink,HeaderComponent],
   templateUrl: './dashboard-owner.component.html',
   styleUrl: './dashboard-owner.component.css'
 })

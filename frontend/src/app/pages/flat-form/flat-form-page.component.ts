@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ApiService } from '../../core/api.service';
+import { HeaderComponent } from '../landingpage/shared/header.component';
 
 @Component({
   selector: 'app-flat-form-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,HeaderComponent],
   templateUrl: './flat-form-page.component.html',
   styleUrl: './flat-form-page.component.css'
 })

@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
 import { roleGuard } from './core/role.guard';
+import { guestGuard } from './core/guest.guard';
 import { AuthPageComponent } from './pages/auth/auth-page.component';
 import { ListingDetailPageComponent } from './pages/listings/listing-detail-page.component';
 import { ListingsPageComponent } from './pages/listings/listings-page.component';
@@ -8,6 +9,8 @@ import { DashboardTenantComponent } from './pages/dashboard-tenant/dashboard-ten
 import { DashboardOwnerComponent } from './pages/dashboard-owner/dashboard-owner.component';
 import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin.component';
 import { FlatFormPageComponent } from './pages/flat-form/flat-form-page.component';
+import { LandingComponent } from './pages/landingpage/landing/landing.component';
+import { IntegrationComponent } from './pages/landingpage/integration/integration.component';
 
 
 
@@ -15,11 +18,17 @@ export const routes: Routes = [
 
   {
     path: '',
-    component: ListingsPageComponent,
+    pathMatch: 'full',
+    component: LandingComponent,
     title: 'Vision Glide — Build a website that grows with your business',
   },
-  { path: 'login', component: AuthPageComponent },
-  { path: 'register', component: AuthPageComponent, data: { mode: 'register' } },
+  { path: 'login', component: AuthPageComponent, canActivate: [guestGuard] },
+  {
+    path: 'register',
+    component: AuthPageComponent,
+    canActivate: [guestGuard],
+    data: { mode: 'register' },
+  },
   { path: 'listings', component: ListingsPageComponent },
   { path: 'listings/:id', component: ListingDetailPageComponent },
   {
@@ -53,15 +62,15 @@ export const routes: Routes = [
     canActivate: [authGuard, roleGuard],
     data: { roles: ['Admin'] },
   },
-  // {
-  //   path: 'login2',
-  //   loadComponent: () =>
-  //     import('./pages/landingpage/integration/integration.component').then(
-  //       (m) => m.IntegrationComponent,
-  //     ),
-  //   data: { action: 'login' },
-  //   title: 'Log in — Vision Glide',
-  // },
+  {
+    path: 'get-started',
+    loadComponent: () =>
+      import('./pages/landingpage/integration/integration.component').then(
+        (m) => m.IntegrationComponent,
+      ),
+    data: { action: 'signup' },
+    title: 'Get started — Vision Glide',
+  },
   { path: '**', redirectTo: '' },
 ];
 

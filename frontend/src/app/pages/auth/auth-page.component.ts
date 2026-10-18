@@ -4,11 +4,12 @@ import { FormBuilder, FormControl, ReactiveFormsModule, Validators } from '@angu
 import { Router } from '@angular/router';
 import { AuthService } from '../../core/auth.service';
 import { ActivatedRoute } from '@angular/router';
+import { HeaderComponent } from '../landingpage/shared/header.component';
 
 @Component({
   selector: 'app-auth-page',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule,HeaderComponent],
   templateUrl: './auth-page.component.html',
   styleUrl: './auth-page.component.css'
 })
