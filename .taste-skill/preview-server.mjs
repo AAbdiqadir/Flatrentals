@@ -1,5 +1,12 @@
 // Local browser verification only. Never imported by, or shipped with, the app.
 import http from 'node:http';
+import { createReadStream, existsSync, statSync } from 'node:fs';
+import { extname, resolve, sep } from 'node:path';
+const production = process.argv.includes('--production');
+const portIndex = process.argv.indexOf('--port');
+const port = portIndex === -1 ? 4300 : Number(process.argv[portIndex + 1]);
+const buildRoot = resolve('frontend/dist/frontend/browser');
+const mime = { '.html': 'text/html', '.js': 'application/javascript', '.css': 'text/css', '.ttf': 'font/ttf', '.svg': 'image/svg+xml', '.ico': 'image/x-icon', '.json': 'application/json' };
 const people = {
   Tenant: { id: 'tenant-amina', fullName: 'Amina Hassan', email: 'amina@flatmail.test', role: 'Tenant' },
   Owner: { id: 'owner-daniel', fullName: 'Daniel Mwangi', email: 'daniel@flatmail.test', role: 'Owner' },
@@ -19,6 +26,17 @@ let users = [...Object.values(people), { id: 'tenant-samuel', fullName: 'Samuel 
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, 'http://127.0.0.1:4300');
   if (!url.pathname.startsWith('/api/')) {
+    if (production) {
+      let file = resolve(buildRoot, '.' + decodeURIComponent(url.pathname));
+      if (file !== buildRoot && !file.startsWith(buildRoot + sep)) { res.writeHead(403); return res.end(); }
+      if (!existsSync(file) || !statSync(file).isFile()) {
+        if (extname(url.pathname)) { res.writeHead(404); return res.end(); }
+        file = resolve(buildRoot, 'index.html');
+      }
+      res.writeHead(200, { 'content-type': mime[extname(file)] || 'application/octet-stream', 'cache-control': 'no-store' });
+      createReadStream(file).pipe(res);
+      return;
+    }
     const proxy = http.request({ hostname: '127.0.0.1', port: 4200, path: req.url, method: req.method, headers: { ...req.headers, host: '127.0.0.1:4200' } }, upstream => {
       res.writeHead(upstream.statusCode, upstream.headers);
       upstream.pipe(res);
@@ -74,4 +92,4 @@ const server = http.createServer(async (req, res) => {
   if (url.pathname === '/api/users') return send(empty ? [] : users);
   return send([]);
 });
-server.listen(4300, '127.0.0.1', () => console.log('Fixture preview: http://127.0.0.1:4300/tenant/dashboard'));
+server.listen(port, '127.0.0.1', () => console.log(`Fixture preview (${production ? 'production build' : 'development proxy'}): http://127.0.0.1:${port}/tenant/profile`));

@@ -1,62 +1,64 @@
-<div class="ledger-page-heading"><div><h1>Administration</h1><p>A clear view of your people, properties and bookings.</p></div><a class="ledger-button" routerLink="/admin/profile">My profile <span aria-hidden="true">↗</span></a></div>
-<div class="ledger-metrics ledger-metrics-four" aria-label="Platform summary">
-  <div><span>Users</span><strong class="num">{{ summary.data()?.usersCount ?? '—' }}</strong></div>
-  <div><span>Flats</span><strong class="num">{{ summary.data()?.flatsCount ?? '—' }}</strong></div>
-  <div><span>Bookings</span><strong class="num">{{ summary.data()?.bookingsCount ?? '—' }}</strong></div>
-  <div><span>Messages</span><strong class="num">{{ summary.data()?.messagesCount ?? '—' }}</strong></div>
-</div>
-@if (summary.error()) { <app-resource-state [error]="summary.error()" [loading]="summary.loading()" (retry)="summary.load()" /> }
-@if (actions.notice()) { <p class="ledger-feedback" role="status">{{ actions.notice() }}</p> }
-@if (actions.error() && !actions.request()) { <p class="ledger-field-error" role="alert">{{ actions.error() }}</p> }
+<app-header />
+<section class="page">
+  <h2>Admin Dashboard</h2>
 
-<div class="ledger-admin-grid">
-  <section class="ledger-data-block" aria-labelledby="admin-users-title">
-    <div class="ledger-block-heading"><div><h2 id="admin-users-title">Users</h2><p>People and their account access.</p></div><span class="ledger-heading-note">{{ users.data()?.length ?? '—' }} total</span></div>
-    <app-resource-state [loading]="users.loading() && !users.data()" [error]="users.error()" [empty]="users.data()?.length === 0" emptyMessage="No users to display." (retry)="users.load()" />
-    @if (users.data()?.length) {
-      <table class="ledger-table ledger-table-users"><caption class="ledger-sr-only">Registered users</caption><thead><tr><th scope="col">Name / email</th><th scope="col">Role</th><th scope="col" class="ledger-align-end">Actions</th></tr></thead><tbody>
-      @for (user of users.data(); track user.id) {
-        <tr><td class="ledger-cell-identity"><div class="ledger-person-cell"><span class="ledger-avatar ledger-avatar-small" aria-hidden="true">{{ initials(user.fullName) }}</span><div><span>{{ user.fullName }}</span><span class="ledger-subline">{{ user.email }}</span></div></div></td>
-        <td data-label="Role"><span class="ledger-neutral-badge">{{ user.role }}</span></td>
-        <td class="ledger-row-action">@if (user.id === auth.user()?.userId) { <a class="ledger-text-button" routerLink="/admin/profile">My profile</a> } @else { <div class="ledger-button-group"><button type="button" class="ledger-text-button" [disabled]="!!actions.busy()" [attr.aria-label]="'Edit ' + user.fullName" (click)="startEdit(user)">Edit</button><button type="button" class="ledger-text-button" [disabled]="!!actions.busy()" [attr.aria-label]="'Delete ' + user.fullName" (click)="deleteUser(user)">Delete</button></div> }</td></tr>
-      }
-      </tbody></table>
-    }
-  </section>
-  <section class="ledger-data-block" aria-labelledby="admin-flats-title">
-    <div class="ledger-block-heading"><div><h2 id="admin-flats-title">Flats</h2><p>Properties across the platform.</p></div><span class="ledger-heading-note">{{ flats.data()?.length ?? '—' }} total</span></div>
-    <app-resource-state [loading]="flats.loading() && !flats.data()" [error]="flats.error()" [empty]="flats.data()?.length === 0" emptyMessage="No flats have been listed yet." (retry)="flats.load()" />
-    @if (flats.data()?.length) {
-      <table class="ledger-table"><caption class="ledger-sr-only">All listed flats</caption><thead><tr><th scope="col">Property / owner</th><th scope="col" class="num">Rent / month</th><th scope="col" class="ledger-align-end">Action</th></tr></thead><tbody>
-      @for (flat of flats.data(); track flat.id) {
-        <tr><td class="ledger-cell-identity"><a [routerLink]="['/listings', flat.id]">{{ flat.address }}</a><span class="ledger-subline">{{ flat.city }} · {{ flat.ownerName }}</span></td><td data-label="Rent / month" class="num">{{ flat.rentPrice | currency:'USD' }}</td><td class="ledger-row-action"><button type="button" class="ledger-text-button" [disabled]="!!actions.busy()" [attr.aria-label]="'Delete ' + flat.address" (click)="deleteFlat(flat)">Delete</button></td></tr>
-      }
-      </tbody></table>
-    }
-  </section>
-</div>
-@if (editUserId) {
-  <section class="ledger-editor" aria-labelledby="edit-user-title">
-    <div class="ledger-block-heading"><div><h2 id="edit-user-title">Edit user</h2><p>Update this person’s details and account role.</p></div></div>
-    <form [formGroup]="userForm" (ngSubmit)="saveUser()" novalidate>
-      <fieldset class="ledger-editor-fields" [disabled]="!!actions.busy()">
-        <div class="ledger-field"><label for="admin-user-name">Full name</label><input id="admin-user-name" formControlName="fullName" autocomplete="off" maxlength="100" [attr.aria-invalid]="userForm.controls.fullName.touched && userForm.controls.fullName.invalid" aria-describedby="admin-user-name-error"/><p id="admin-user-name-error" class="ledger-field-error" [hidden]="!userForm.controls.fullName.touched || !userForm.controls.fullName.invalid">Enter a full name.</p></div>
-        <div class="ledger-field"><label for="admin-user-email">Email address</label><input id="admin-user-email" type="email" formControlName="email" autocomplete="off" maxlength="254" [attr.aria-invalid]="userForm.controls.email.touched && userForm.controls.email.invalid" aria-describedby="admin-user-email-error"/><p id="admin-user-email-error" class="ledger-field-error" [hidden]="!userForm.controls.email.touched || !userForm.controls.email.invalid">Enter a valid email address.</p></div>
-        <div class="ledger-field"><label for="admin-user-role">Account role</label><select id="admin-user-role" formControlName="role"><option value="Admin">Admin</option><option value="Owner">Owner</option><option value="Tenant">Tenant</option></select></div>
-      </fieldset>
-      <div class="ledger-form-actions"><span class="ledger-description-note">Role changes update this person’s access.</span><div class="ledger-button-group"><button type="button" class="ledger-button ledger-button-quiet" [disabled]="!!actions.busy()" (click)="editUserId = ''">Cancel</button><button type="submit" class="ledger-button ledger-button-primary" [disabled]="!!actions.busy()">{{ actions.busy() === 'save-user' ? 'Saving…' : 'Save user' }}</button></div></div>
+  <div class="stats" *ngIf="summary">
+    <div>Users: {{ summary.usersCount }}</div>
+    <div>Flats: {{ summary.flatsCount }}</div>
+    <div>Bookings: {{ summary.bookingsCount }}</div>
+    <div>Messages: {{ summary.messagesCount }}</div>
+  </div>
+
+  <article class="panel">
+    <h3>Users</h3>
+    <table>
+      <tr><th>Name</th><th>Email</th><th>Role</th><th>Actions</th></tr>
+      <tr *ngFor="let user of users">
+        <td>{{ user.fullName }}</td>
+        <td>{{ user.email }}</td>
+        <td>{{ user.role }}</td>
+        <td>
+          <button (click)="startEdit(user)">Edit</button>
+          <button (click)="deleteUser(user.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+
+    <form *ngIf="editUserId" [formGroup]="userForm" (ngSubmit)="saveUser()" class="edit-form">
+      <input type="text" formControlName="fullName" placeholder="Full name" />
+      <input type="email" formControlName="email" placeholder="Email" />
+      <select formControlName="role">
+        <option value="Admin">Admin</option>
+        <option value="Owner">Owner</option>
+        <option value="Tenant">Tenant</option>
+      </select>
+      <button type="submit">Save user</button>
     </form>
-  </section>
-}
-<section class="ledger-data-block" aria-labelledby="admin-bookings-title">
-  <div class="ledger-block-heading"><div><h2 id="admin-bookings-title">Bookings</h2><p>Rental requests and their current status.</p></div><span class="ledger-heading-note">{{ bookings.data()?.length ?? '—' }} total</span></div>
-  <app-resource-state [loading]="bookings.loading() && !bookings.data()" [error]="bookings.error()" [empty]="bookings.data()?.length === 0" emptyMessage="No bookings have been requested yet." (retry)="bookings.load()" />
-  @if (bookings.data()?.length) {
-    <table class="ledger-table"><caption class="ledger-sr-only">All booking requests</caption><thead><tr><th scope="col">Flat / tenant</th><th scope="col">Rental dates</th><th scope="col">Status</th><th scope="col" class="ledger-align-end">Action</th></tr></thead><tbody>
-    @for (booking of bookings.data(); track booking.id) {
-      <tr><td class="ledger-cell-identity"><a [routerLink]="['/listings', booking.flatId]">{{ booking.flatAddress }}</a><span class="ledger-subline">{{ booking.tenantName }}</span></td><td data-label="Rental dates">{{ booking.startDate | date:'d MMM y' }}<span class="ledger-subline">to {{ booking.endDate | date:'d MMM y' }}</span></td><td data-label="Status"><span class="ledger-status" [attr.data-status]="booking.status">{{ booking.status }}</span></td><td class="ledger-row-action"><button type="button" class="ledger-text-button" [disabled]="!!actions.busy()" [attr.aria-label]="'Delete booking for ' + booking.flatAddress" (click)="deleteBooking(booking)">Delete</button></td></tr>
-    }
-    </tbody></table>
-  }
+  </article>
+
+  <article class="panel">
+    <h3>All Flats</h3>
+    <table>
+      <tr><th>Address</th><th>Owner</th><th>Rent</th><th>Action</th></tr>
+      <tr *ngFor="let flat of flats">
+        <td>{{ flat.address }}, {{ flat.city }}</td>
+        <td>{{ flat.ownerName }}</td>
+        <td>${{ flat.rentPrice }}</td>
+        <td><button (click)="deleteFlat(flat.id)">Delete</button></td>
+      </tr>
+    </table>
+  </article>
+
+  <article class="panel">
+    <h3>All Bookings</h3>
+    <table>
+      <tr><th>Flat</th><th>Tenant</th><th>Status</th><th>Action</th></tr>
+      <tr *ngFor="let booking of bookings">
+        <td>{{ booking.flatAddress }}</td>
+        <td>{{ booking.tenantName }}</td>
+        <td>{{ booking.status }}</td>
+        <td><button (click)="deleteBooking(booking.id)">Delete</button></td>
+      </tr>
+    </table>
+  </article>
 </section>
-<app-action-dialog [request]="actions.request()" [busy]="!!actions.busy()" [error]="actions.error()" (confirmed)="actions.confirm()" (dismissed)="actions.dismiss()" />
