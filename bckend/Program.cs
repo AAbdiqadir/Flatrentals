@@ -102,6 +102,14 @@ builder.Services.Configure<CompreFaceOptions>(builder.Configuration.GetSection("
 builder.Services.AddHttpClient<IFaceRecognitionService, CompreFaceRecognitionService>();
 builder.Services.AddProblemDetails();
 
+builder.Services.AddStackExchangeRedisCache(options =>
+{
+    options.Configuration =
+        builder.Configuration.GetConnectionString("Redis")
+        ?? throw new InvalidOperationException("Missing Redis connection.");
+
+    options.InstanceName = "FlatRentals:";
+});
 var app = builder.Build();
 
 app.MapHealthChecks("/health/live", new HealthCheckOptions
