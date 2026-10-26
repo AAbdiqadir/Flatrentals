@@ -13,13 +13,28 @@ services:
       timeout: 5s
       retries: 20
     restart: unless-stopped
+  redis:
+      image: redis:7-alpine
+      command:
+        - redis-server
+        - --maxmemory
+        - 128mb
+        - --maxmemory-policy
+        - allkeys-lru
+      mem_limit: 256m
+      healthcheck:
+        test: ["CMD", "redis-cli", "ping"]
+        interval: 5s
+        timeout: 3s
+        retries: 10
+      restart: unless-stopped
 
   backend:
     build: ./bckend
     image: flatrent-backend:${APP_VERSION}
     environment:
       ASPNETCORE_ENVIRONMENT: Production
-
+      ConnectionStrings__Redis: "redis:6379"
       ConnectionStrings__DefaultConnection: >-
         Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
       Jwt__Key: ${JWT_KEY}
@@ -32,6 +47,8 @@ services:
       - backend_uploads:/app/wwwroot/uploads
     depends_on:
       postgres:
+        condition: service_healthy
+      redis:
         condition: service_healthy
     restart: unless-stopped
 
