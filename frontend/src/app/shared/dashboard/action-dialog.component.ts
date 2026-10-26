@@ -27,7 +27,7 @@ export class ActionDialogComponent implements AfterViewInit, OnChanges {
   @ViewChild('dialog') private dialog?: ElementRef<HTMLDialogElement>;
 
   ngAfterViewInit(): void { this.sync(); }
-  ngOnChanges(): void { this.sync(); }
+  ngOnChanges(): void { queueMicrotask(() => this.sync()); }
 
   cancel(event: Event): void {
     event.preventDefault();

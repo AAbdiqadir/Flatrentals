@@ -31,7 +31,7 @@
       @if (saveError()) { <p class="ledger-field-error" role="alert">{{ saveError() }}</p> }
       <div class="ledger-form-actions">
         <span class="ledger-save-status" role="status" aria-live="polite">
-          @if (saved() && form.pristine) { <span class="ledger-saved-mark" aria-hidden="true">✓</span> Changes saved }
+          @if (saved() && form.pristine) { <svg class="ledger-saved-mark" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="m3 8 3 3 7-7"/></svg> Changes saved }
           @else if (form.dirty) { Unsaved changes }
           @else { Your details are up to date }
         </span>

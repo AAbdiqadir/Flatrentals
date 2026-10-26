@@ -57,7 +57,7 @@ export class ProfilePageComponent {
     this.saved.set(false);
     this.saveError.set('');
     if (this.form.invalid) {
-      document.querySelector<HTMLInputElement>('#profile-form [aria-invalid="true"]')?.focus();
+      requestAnimationFrame(() => document.querySelector<HTMLInputElement>('#profile-form [aria-invalid="true"]')?.focus());
       return;
     }
     const values = this.form.getRawValue();

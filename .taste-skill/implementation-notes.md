@@ -31,3 +31,15 @@ Current session: Sign out of this account on this browser. / Sign out.
 ## Verification data
 
 The local preview-server.mjs is an isolated HTTP fixture proxy for screenshots and interaction checks. It is never included in Angular. Example accounts: Amina Hassan (tenant), Daniel Mwangi (owner), Nadia Yusuf (admin), Samuel Otieno (tenant). Three Nairobi flats; three booking requests. Summary counts are computed from those rows. Screens with real data use the existing API directly.
+
+## Profile integration repair — 26 October 2026
+
+The current checkout contained the profile and shared dashboard components but no profile routes, no shared dashboard CSS file/import, and no AuthService.updateProfileDetails implementation. The unreachable profile was therefore omitted from the Angular bundle. Existing dashboard components also rendered without the shared shell.
+
+Restored the role-guarded dashboard/profile route trees, the auth identity helper, and the approved scoped stylesheet recovered from the last verified production CSS artifact. The CSS compiles to the same styles-W6NNZJT4.css asset. Added authenticated desktop and mobile profile links to the public listings header. Profile validation focus runs after Angular updates the fields, and confirmation dialogs wait for their view updates.
+
+Validation: production build passed; 14 Angular tests passed, including eight integration regressions covering all three roles, applied styles, profile navigation and saving, desktop/mobile links, logged-out redirects and role restrictions. The public header test uses the HTTP testing providers required by its existing auth dependency. Existing marketing-component CSS budget warnings remain unchanged.
+
+The production bundle was served directly with isolated API fixtures using preview-server.mjs --production --port 4400. The profile inspector reports 0 FAIL and 0 WARN at 1440, 768 and 390 pixels. All six final screenshot files were opened. The restored profile retains aligned two-column desktop sections, stacked phone fields, neutral chrome and the approved account identity treatment. Source lint reports 0 FAIL and one justified warning for the floating dialog's shadow. No new style draw or external assets were needed.
+
+The Dockerfile already packages this production output. Docker containers and the live deployment were not accessed or rebuilt during the repair. Deployment must include frontend/src/styles/dashboard.css as well as the updated source files before rebuilding the frontend image.
