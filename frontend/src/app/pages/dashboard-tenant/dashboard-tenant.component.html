@@ -1,30 +1,32 @@
-<div class="ledger-page-heading">
-  <div><h1>Your rental overview</h1><p>Keep track of your bookings and find your next space.</p></div>
-  <a class="ledger-button ledger-button-primary" routerLink="/listings">Browse flats <span aria-hidden="true">↗</span></a>
-</div>
-<div class="ledger-metrics" aria-label="Rental summary">
-  <div><span>Available flats</span><strong class="num">{{ summary.data()?.listingsCount ?? '—' }}</strong></div>
-  <div><span>Your bookings</span><strong class="num">{{ summary.data()?.bookingsCount ?? '—' }}</strong></div>
-  <div><span>Messages</span><strong class="num">{{ summary.data()?.messagesCount ?? '—' }}</strong></div>
-</div>
-@if (summary.error()) { <app-resource-state [error]="summary.error()" [loading]="summary.loading()" (retry)="summary.load()" /> }
-<section class="ledger-data-block" aria-labelledby="tenant-bookings-title">
-  <div class="ledger-block-heading"><div><h2 id="tenant-bookings-title">Your bookings</h2><p>{{ pendingCount() ? pendingCount() + ' awaiting a response from the owner.' : 'Review the dates and status of your requests.' }}</p></div><span class="ledger-heading-note">{{ bookings.data()?.length ?? '—' }} total</span></div>
-  <app-resource-state [loading]="bookings.loading() && !bookings.data()" [error]="bookings.error()" [empty]="bookings.data()?.length === 0" emptyMessage="You haven't requested a booking yet. Browse available flats to find your next home." (retry)="bookings.load()" />
-  @if (bookings.data()?.length) {
-    <table class="ledger-table"><caption class="ledger-sr-only">Your booking requests</caption>
-      <thead><tr><th scope="col">Flat</th><th scope="col">Rental dates</th><th scope="col">Status</th><th scope="col" class="ledger-align-end">Action</th></tr></thead>
-      <tbody>@for (booking of bookings.data(); track booking.id) {
-        <tr>
-          <td class="ledger-cell-identity"><a [routerLink]="['/listings', booking.flatId]">{{ booking.flatAddress }}</a></td>
-          <td data-label="Rental dates"><span>{{ booking.startDate | date:'d MMM y' }}</span><span class="ledger-subline">to {{ booking.endDate | date:'d MMM y' }}</span></td>
-          <td data-label="Status"><span class="ledger-status" [attr.data-status]="booking.status">{{ booking.status }}</span></td>
-          <td class="ledger-row-action">@if (booking.status === 'Pending') { <button class="ledger-text-button" type="button" [disabled]="!!actions.busy()" [attr.aria-label]="'Cancel booking for ' + booking.flatAddress" (click)="cancelBooking(booking)">Cancel</button> }</td>
-        </tr>
-      }</tbody>
+<app-header />
+<section class="page">
+  <h2>Tenant Dashboard</h2>
+
+  <div class="stats" *ngIf="summary">
+    <div>Listings: {{ summary.listingsCount }}</div>
+    <div>Bookings: {{ summary.bookingsCount }}</div>
+    <div>Messages: {{ summary.messagesCount }}</div>
+  </div>
+
+  <article class="panel">
+    <h3>My Bookings</h3>
+    <table>
+      <tr><th>Flat</th><th>Dates</th><th>Status</th><th>Action</th></tr>
+      <tr *ngFor="let b of bookings">
+        <td>{{ b.flatAddress }}</td>
+        <td>{{ b.startDate }} - {{ b.endDate }}</td>
+        <td>{{ b.status }}</td>
+        <td><button *ngIf="b.status === 'Pending'" (click)="cancelBooking(b.id)">Cancel</button></td>
+      </tr>
     </table>
-  }
+  </article>
+
+  <article class="panel">
+    <h3>My Profile</h3>
+    <form [formGroup]="profileForm" (ngSubmit)="updateProfile()">
+      <input type="text" formControlName="fullName" placeholder="Full name" />
+      <input type="email" formControlName="email" placeholder="Email" />
+      <button type="submit">Save</button>
+    </form>
+  </article>
 </section>
-@if (actions.notice()) { <p class="ledger-feedback" role="status">{{ actions.notice() }}</p> }
-@if (actions.error() && !actions.request()) { <p class="ledger-field-error" role="alert">{{ actions.error() }}</p> }
-<app-action-dialog [request]="actions.request()" [busy]="!!actions.busy()" [error]="actions.error()" (confirmed)="actions.confirm()" (dismissed)="actions.dismiss()" />

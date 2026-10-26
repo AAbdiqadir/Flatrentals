@@ -11,8 +11,6 @@ import { DashboardAdminComponent } from './pages/dashboard-admin/dashboard-admin
 import { FlatFormPageComponent } from './pages/flat-form/flat-form-page.component';
 import { LandingComponent } from './pages/landingpage/landing/landing.component';
 import { IntegrationComponent } from './pages/landingpage/integration/integration.component';
-import { DashboardShellComponent } from './shared/dashboard/dashboard-shell.component';
-import { ProfilePageComponent } from './pages/profile/profile-page.component';
 
 
 
@@ -46,38 +44,23 @@ export const routes: Routes = [
     data: { roles: ['Owner', 'Admin'] },
   },
 
-  {
-    path: 'tenant',
-    component: DashboardShellComponent,
+    {
+    path: 'tenant/dashboard',
+    component: DashboardTenantComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['Tenant'] },
-    children: [
-      { path: 'dashboard', component: DashboardTenantComponent, title: 'Your rental overview — FlatRental' },
-      { path: 'profile', component: ProfilePageComponent, title: 'My profile — FlatRental' },
-      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-    ],
   },
   {
-    path: 'owner',
-    component: DashboardShellComponent,
+    path: 'owner/dashboard',
+    component: DashboardOwnerComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['Owner', 'Admin'] },
-    children: [
-      { path: 'dashboard', component: DashboardOwnerComponent, title: 'Property overview — FlatRental' },
-      { path: 'profile', component: ProfilePageComponent, title: 'My profile — FlatRental' },
-      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-    ],
   },
   {
-    path: 'admin',
-    component: DashboardShellComponent,
+    path: 'admin/dashboard',
+    component: DashboardAdminComponent,
     canActivate: [authGuard, roleGuard],
     data: { roles: ['Admin'] },
-    children: [
-      { path: 'dashboard', component: DashboardAdminComponent, title: 'Administration — FlatRental' },
-      { path: 'profile', component: ProfilePageComponent, title: 'My profile — FlatRental' },
-      { path: '', pathMatch: 'full', redirectTo: 'dashboard' },
-    ],
   },
   {
     path: 'get-started',

@@ -33,10 +33,6 @@ export class AuthService {
   readonly isSigningOut = signal(false);
   readonly sessionError = signal('');
 
-  updateProfileDetails(details: { fullName: string; email: string }): void {
-    this.authState.update(auth => auth ? { ...auth, fullName: details.fullName, email: details.email } : auth);
-  }
-
   constructor(
     private http: HttpClient,
     private router: Router

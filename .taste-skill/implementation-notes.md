@@ -1,5 +1,7 @@
 # Precision Ledger
 
+Status: reverted at the user's request on 26 October 2026. The active app uses the original simple admin, owner and tenant dashboards, including the tenant's inline profile form. The entries below are historical design notes. The Ledger shell, dedicated profile pages, stylesheet and related integration tests have been removed. The original dashboard files, routes, header, auth service and global styles match their pre-redesign versions in `ed09173^`. Production build and the six existing Angular tests pass. Docker containers were not rebuilt.
+
 Selected by the user. Skill style: achromatic-ledger, seed 463584233. No redraws.
 Brand mapping: locally installed Manrope, white ground, charcoal ink, the existing sage reserved for status. The dealt no-sidebar shell suits the three actual destinations (dashboard, profile, listings); no invented navigation or chart.
 

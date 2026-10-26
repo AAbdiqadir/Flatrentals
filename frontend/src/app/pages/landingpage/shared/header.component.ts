@@ -3,7 +3,6 @@ import {
   ElementRef,
   HostListener,
   ViewChild,
-  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -22,18 +21,26 @@ import { AuthService } from '../../../core/auth.service';
         ><app-brand
       /></a>
       <nav aria-label="Main navigation" class="desktop-nav">
-      @if (!auth.isLoggedIn()) {
-        @for (link of links; track link.id) {
-          <a routerLink="/" [fragment]="link.id">{{ link.label }}</a>
-        }
+      <!-- Links to sections -->
+      @for (link of links; track link.id) {
+        <a routerLink="/" [fragment]="link.id">
+          {{ link.label }}
+        </a>
       }
 
       <!-- Links to pages -->
       <a routerLink="/listings">Listings</a>
 
-      @if (workspacePath(); as workspace) {
-        <a [routerLink]="workspace + '/dashboard'">Dashboard</a>
-        <a [routerLink]="workspace + '/profile'">My profile</a>
+      @switch (auth.role()) {
+        @case ('Tenant') {
+          <a routerLink="/tenant/dashboard">Tenant Dashboard</a>
+        }
+        @case ('Owner') {
+          <a routerLink="/owner/dashboard">Owner Dashboard</a>
+        }
+        @case ('Admin') {
+          <a routerLink="/admin/dashboard">Admin Dashboard</a>
+        }
       }
 
     
@@ -55,10 +62,9 @@ import { AuthService } from '../../../core/auth.service';
       }
        
         
-      @if (!auth.isLoggedIn()) {
-        <a routerLink="/get-started" class="button button-dark nav-cta">Get started <app-icon name="arrow" /></a>
-      }
-      <button
+      <a routerLink="/get-started" class="button button-dark nav-cta"
+          >Get started <app-icon name="arrow" /></a
+        ><button
           #menuToggle
           type="button"
           class="menu-toggle"
@@ -79,16 +85,12 @@ import { AuthService } from '../../../core/auth.service';
       aria-label="Mobile navigation"
       [hidden]="!menuOpen()"
     >
-      @if (!auth.isLoggedIn()) {
-        @for (link of links; track link.id) {
-          <a routerLink="/" [fragment]="link.id" (click)="menuOpen.set(false)">{{ link.label }}</a>
-        }
+      @for (link of links; track link.id) {
+        <a routerLink="/" [fragment]="link.id" (click)="menuOpen.set(false)">{{
+          link.label
+        }}</a>
       }
-      <a routerLink="/listings" (click)="menuOpen.set(false)">Listings</a>
-      @if (workspacePath(); as workspace) {
-        <a [routerLink]="workspace + '/dashboard'" (click)="menuOpen.set(false)">Dashboard</a>
-        <a [routerLink]="workspace + '/profile'" (click)="menuOpen.set(false)">My profile</a>
-      }
+        <a routerLink="/listings">Listings</a>
       @if (auth.isLoggedIn()) {
         <button
           
@@ -113,10 +115,6 @@ export class HeaderComponent {
   @ViewChild('menuToggle') private menuToggle?: ElementRef<HTMLButtonElement>;
   readonly menuOpen = signal(false);
   readonly  auth = inject(AuthService);
-  readonly workspacePath = computed(() => {
-    const role = this.auth.role();
-    return this.auth.isLoggedIn() && role ? '/' + role.toLowerCase() : null;
-  });
   readonly links = [
     { id: 'product', label: 'Product' },
     { id: 'features', label: 'Features' },
