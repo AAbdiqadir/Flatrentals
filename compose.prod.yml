@@ -46,6 +46,7 @@ services:
       CompreFace__RecognitionApiKey: ${COMPREFACE_RECOGNITION_API_KEY}
     volumes:
       - backend_uploads:/app/wwwroot/uploads
+      - backend_keys:/root/.aspnet/DataProtection-Keys
     depends_on:
       postgres:
         condition: service_healthy
