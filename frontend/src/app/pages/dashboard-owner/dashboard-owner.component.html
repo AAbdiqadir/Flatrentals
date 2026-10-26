@@ -1,41 +1,44 @@
-<div class="ledger-page-heading">
-  <div><h1>Property overview</h1><p>Your flats, incoming requests and the decisions that matter.</p></div>
-  <a class="ledger-button ledger-button-primary" routerLink="/owner/flats/new"><span aria-hidden="true">+</span> Add a flat</a>
-</div>
-<div class="ledger-metrics" aria-label="Property summary">
-  <div><span>Your flats</span><strong class="num">{{ summary.data()?.myFlatsCount ?? '—' }}</strong></div>
-  <div><span>Booking requests</span><strong class="num">{{ summary.data()?.bookingRequestsCount ?? '—' }}</strong></div>
-  <div><span>Messages</span><strong class="num">{{ summary.data()?.messagesCount ?? '—' }}</strong></div>
-</div>
-@if (summary.error()) { <app-resource-state [error]="summary.error()" [loading]="summary.loading()" (retry)="summary.load()" /> }
-@if (actions.notice()) { <p class="ledger-feedback" role="status">{{ actions.notice() }}</p> }
-@if (actions.error() && !actions.request()) { <p class="ledger-field-error" role="alert">{{ actions.error() }}</p> }
-<section class="ledger-data-block" aria-labelledby="owner-bookings-title">
-  <div class="ledger-block-heading"><div><h2 id="owner-bookings-title">Booking requests</h2><p>{{ pendingCount() ? pendingCount() + ' waiting for your decision.' : 'You’re up to date. Review your requests below.' }}</p></div><span class="ledger-heading-note">{{ bookings.data()?.length ?? '—' }} total</span></div>
-  <app-resource-state [loading]="bookings.loading() && !bookings.data()" [error]="bookings.error()" [empty]="bookings.data()?.length === 0" emptyMessage="No booking requests yet. Requests for your flats will appear here." (retry)="bookings.load()" />
-  @if (bookings.data()?.length) {
-    <table class="ledger-table"><caption class="ledger-sr-only">Incoming booking requests</caption><thead><tr><th scope="col">Flat / tenant</th><th scope="col">Rental dates</th><th scope="col">Status</th><th scope="col" class="ledger-align-end">Actions</th></tr></thead><tbody>
-      @for (booking of bookings.data(); track booking.id) {
-        <tr><td class="ledger-cell-identity"><a [routerLink]="['/listings', booking.flatId]">{{ booking.flatAddress }}</a><span class="ledger-subline">{{ booking.tenantName }}</span></td>
-          <td data-label="Rental dates">{{ booking.startDate | date:'d MMM y' }}<span class="ledger-subline">to {{ booking.endDate | date:'d MMM y' }}</span></td>
-          <td data-label="Status"><span class="ledger-status" [attr.data-status]="booking.status">{{ booking.status }}</span></td>
-          <td class="ledger-row-action">@if (booking.status === 'Pending') { <div class="ledger-button-group"><button class="ledger-text-button" type="button" [disabled]="!!actions.busy()" [attr.aria-label]="'Reject request from ' + booking.tenantName" (click)="setStatus(booking, 'Rejected')">Reject</button><button class="ledger-button" type="button" [disabled]="!!actions.busy()" [attr.aria-label]="'Approve request from ' + booking.tenantName" (click)="setStatus(booking, 'Approved')">{{ actions.busy() === 'booking-' + booking.id ? 'Approving…' : 'Approve' }}</button></div> }</td></tr>
-      }
-    </tbody></table>
-  }
+<app-header />
+<section class="page">
+  <h2>Owner Dashboard</h2>
+
+  <div class="stats" *ngIf="summary">
+    <div>My flats: {{ summary.myFlatsCount }}</div>
+    <div>Booking requests: {{ summary.bookingRequestsCount }}</div>
+    <div>Messages: {{ summary.messagesCount }}</div>
+  </div>
+
+  <article class="panel">
+    <h3>My Flats</h3>
+    <a routerLink="/owner/flats/new">Add New Flat</a>
+    <table>
+      <tr><th>Address</th><th>Rent</th><th>Available</th><th>Actions</th></tr>
+      <tr *ngFor="let flat of flats">
+        <td>{{ flat.address }}, {{ flat.city }}</td>
+        <td>${{ flat.rentPrice }}</td>
+        <td>{{ flat.isAvailable ? 'Yes' : 'No' }}</td>
+        <td>
+          <a [routerLink]="['/owner/flats', flat.id, 'edit']">Edit</a>
+          <button (click)="deleteFlat(flat.id)">Delete</button>
+        </td>
+      </tr>
+    </table>
+  </article>
+
+  <article class="panel">
+    <h3>Incoming Booking Requests</h3>
+    <table>
+      <tr><th>Flat</th><th>Tenant</th><th>Dates</th><th>Status</th><th>Actions</th></tr>
+      <tr *ngFor="let b of bookings">
+        <td>{{ b.flatAddress }}</td>
+        <td>{{ b.tenantName }}</td>
+        <td>{{ b.startDate }} - {{ b.endDate }}</td>
+        <td>{{ b.status }}</td>
+        <td>
+          <button *ngIf="b.status === 'Pending'" (click)="setStatus(b.id, 'Approved')">Approve</button>
+          <button *ngIf="b.status === 'Pending'" (click)="setStatus(b.id, 'Rejected')">Reject</button>
+        </td>
+      </tr>
+    </table>
+  </article>
 </section>
-<section class="ledger-data-block" aria-labelledby="owner-flats-title">
-  <div class="ledger-block-heading"><div><h2 id="owner-flats-title">Your flats</h2><p>Keep your property details and availability current.</p></div><span class="ledger-heading-note">{{ flats.data()?.length ?? '—' }} total</span></div>
-  <app-resource-state [loading]="flats.loading() && !flats.data()" [error]="flats.error()" [empty]="flats.data()?.length === 0" emptyMessage="You haven't listed a flat yet. Add your first flat to start receiving requests." (retry)="flats.load()" />
-  @if (flats.data()?.length) {
-    <table class="ledger-table"><caption class="ledger-sr-only">Your listed flats</caption><thead><tr><th scope="col">Property</th><th scope="col" class="num">Monthly rent</th><th scope="col">Availability</th><th scope="col" class="ledger-align-end">Actions</th></tr></thead><tbody>
-      @for (flat of flats.data(); track flat.id) {
-        <tr><td class="ledger-cell-identity"><a [routerLink]="['/listings', flat.id]">{{ flat.address }}</a><span class="ledger-subline">{{ flat.city }} · {{ flat.rooms }} {{ flat.rooms === 1 ? 'room' : 'rooms' }}</span></td>
-          <td data-label="Monthly rent" class="num">{{ flat.rentPrice | currency:'USD' }}</td>
-          <td data-label="Availability"><span class="ledger-status" [attr.data-status]="flat.isAvailable ? 'Available' : 'Unavailable'">{{ flat.isAvailable ? 'Available' : 'Unavailable' }}</span></td>
-          <td class="ledger-row-action"><div class="ledger-button-group"><a class="ledger-text-button" [routerLink]="['/owner/flats', flat.id, 'edit']" [attr.aria-label]="'Edit ' + flat.address">Edit</a><button class="ledger-text-button" type="button" [disabled]="!!actions.busy()" [attr.aria-label]="'Delete ' + flat.address" (click)="deleteFlat(flat)">Delete</button></div></td></tr>
-      }
-    </tbody></table>
-  }
-</section>
-<app-action-dialog [request]="actions.request()" [busy]="!!actions.busy()" [error]="actions.error()" (confirmed)="actions.confirm()" (dismissed)="actions.dismiss()" />

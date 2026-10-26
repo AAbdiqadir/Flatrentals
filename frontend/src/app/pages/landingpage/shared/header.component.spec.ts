@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { HeaderComponent } from './header.component';
 
 describe('Mobile navigation', () => {
   beforeEach(() =>
-    TestBed.configureTestingModule({ providers: [provideRouter([])] }),
+    TestBed.configureTestingModule({ providers: [provideRouter([]), provideHttpClient(), provideHttpClientTesting()] }),
   );
   it('opens and closes with Escape while keeping ARIA state accurate', () => {
     const fixture = TestBed.createComponent(HeaderComponent);
