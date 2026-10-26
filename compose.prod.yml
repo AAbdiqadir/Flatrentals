@@ -13,21 +13,22 @@ services:
       timeout: 5s
       retries: 20
     restart: unless-stopped
+
   redis:
-      image: redis:7-alpine
-      command:
-        - redis-server
-        - --maxmemory
-        - 128mb
-        - --maxmemory-policy
-        - allkeys-lru
-      mem_limit: 256m
-      healthcheck:
-        test: ["CMD", "redis-cli", "ping"]
-        interval: 5s
-        timeout: 3s
-        retries: 10
-      restart: unless-stopped
+    image: redis:7-alpine
+    command:
+      - redis-server
+      - --maxmemory
+      - 128mb
+      - --maxmemory-policy
+      - allkeys-lru
+    mem_limit: 256m
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    restart: unless-stopped
 
   backend:
     build: ./bckend
@@ -79,3 +80,4 @@ volumes:
   backend_uploads:
   caddy_data:
   caddy_config:
+  backend_keys:
