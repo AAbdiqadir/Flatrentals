@@ -5,24 +5,52 @@ using bckend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
+using System.Text.Json;
+using Microsoft.Extensions.Caching.Distributed;
 namespace bckend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class FlatsController(AppDbContext dbContext, IWebHostEnvironment environment) : ControllerBase
+public class FlatsController(AppDbContext dbContext, 
+            IWebHostEnvironment environment,
+            IDistributedCache cache) : ControllerBase
 {
+    private const string FlatsCacheKey = "flats:all:v1";
     [HttpGet]
     [AllowAnonymous]
+
     public async Task<ActionResult<IEnumerable<FlatResponseDto>>> GetAll()
     {
+        var cachedJson = await cache.GetStringAsync(FlatsCacheKey);
+
+        if (cachedJson is not null)
+        {
+            var cachedFlats =
+                JsonSerializer.Deserialize<List<FlatResponseDto>>(cachedJson);
+
+        if (cachedFlats is not null)
+        {
+            return Ok(cachedFlats);
+        }
+    }
         var flats = await dbContext.Flats
+            .AsNoTracking()
             .Include(f => f.Images)
             .Include(f => f.Owner)
             .OrderByDescending(f => f.CreatedAt)
             .ToListAsync();
 
-        return Ok(flats.Select(MapFlat));
+        var response = flats.Select(MapFlat).ToList();
+
+        await cache.SetStringAsync(
+            FlatsCacheKey,
+            JsonSerializer.Serialize(response),
+            new DistributedCacheEntryOptions
+            {
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromSeconds(60)
+            });
+
+        return Ok(response);
     }
 
     [HttpGet("{id:int}")]
@@ -91,7 +119,7 @@ public class FlatsController(AppDbContext dbContext, IWebHostEnvironment environ
 
         dbContext.Flats.Add(flat);
         await dbContext.SaveChangesAsync();
-
+        await cache.RemoveAsync(FlatsCacheKey);
         await dbContext.Entry(flat).Reference(f => f.Owner).LoadAsync();
         await dbContext.Entry(flat).Collection(f => f.Images).LoadAsync();
 
@@ -128,6 +156,7 @@ public class FlatsController(AppDbContext dbContext, IWebHostEnvironment environ
         }
 
         await dbContext.SaveChangesAsync();
+        await cache.RemoveAsync(FlatsCacheKey);
 
         await dbContext.Entry(flat).Reference(f => f.Owner).LoadAsync();
         await dbContext.Entry(flat).Collection(f => f.Images).LoadAsync();
@@ -152,6 +181,7 @@ public class FlatsController(AppDbContext dbContext, IWebHostEnvironment environ
 
         dbContext.Flats.Remove(flat);
         await dbContext.SaveChangesAsync();
+        await cache.RemoveAsync(FlatsCacheKey);
 
         return NoContent();
     }

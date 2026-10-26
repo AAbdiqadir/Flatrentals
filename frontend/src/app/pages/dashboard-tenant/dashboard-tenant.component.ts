@@ -1,53 +1,41 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, DestroyRef, computed, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { ApiService } from '../../core/api.service';
-import { Booking, User } from '../../models/types';
-import { HeaderComponent } from '../landingpage/shared/header.component';
+import { Booking } from '../../models/types';
+import { DashboardResource } from '../../shared/dashboard/dashboard-data';
+import { DashboardActions } from '../../shared/dashboard/dashboard-actions';
+import { ActionDialogComponent } from '../../shared/dashboard/action-dialog.component';
+import { ResourceStateComponent } from '../../shared/dashboard/resource-state.component';
 
 @Component({
   selector: 'app-dashboard-tenant',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule,HeaderComponent],
+  imports: [CommonModule, RouterLink, ActionDialogComponent, ResourceStateComponent],
+  providers: [DashboardActions],
   templateUrl: './dashboard-tenant.component.html',
-  styleUrl: './dashboard-tenant.component.css'
 })
-export class DashboardTenantComponent implements OnInit {
-  summary?: { listingsCount: number; bookingsCount: number; messagesCount: number };
-  bookings: Booking[] = [];
-  me?: User;
+export class DashboardTenantComponent {
+  private readonly api = inject(ApiService);
+  private readonly destroyRef = inject(DestroyRef);
+  readonly actions = inject(DashboardActions);
+  readonly summary = new DashboardResource(() => this.api.getTenantDashboard(), this.destroyRef);
+  readonly bookings = new DashboardResource(() => this.api.getBookings(), this.destroyRef);
+  readonly pendingCount = computed(() => this.bookings.data()?.filter(booking => booking.status === 'Pending').length ?? 0);
 
-  profileForm = this.fb.group({
-    fullName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]]
-  });
+  constructor() { this.reload(); }
 
-  constructor(private api: ApiService, private fb: FormBuilder) {}
+  reload(): void { this.summary.load(); this.bookings.load(); }
 
-  ngOnInit(): void {
-    this.reload();
-  }
-
-  reload() {
-    this.api.getTenantDashboard().subscribe((res) => this.summary = res);
-    this.api.getBookings().subscribe((res) => this.bookings = res);
-    this.api.getMe().subscribe((res) => {
-      this.me = res;
-      this.profileForm.patchValue({ fullName: res.fullName, email: res.email });
+  cancelBooking(booking: Booking): void {
+    this.actions.ask({
+      key: 'cancel-' + booking.id,
+      title: 'Cancel this booking?',
+      description: `Your request for ${booking.flatAddress} will be cancelled. This cannot be undone.`,
+      label: 'Cancel booking',
+      work: () => this.api.deleteBooking(booking.id),
+      done: () => this.reload(),
+      success: 'Booking cancelled.',
     });
-  }
-
-  updateProfile() {
-    if (this.profileForm.invalid) {
-      this.profileForm.markAllAsTouched();
-      return;
-    }
-
-    this.api.updateMe(this.profileForm.getRawValue() as { fullName: string; email: string })
-      .subscribe(() => this.reload());
-  }
-
-  cancelBooking(id: number) {
-    this.api.deleteBooking(id).subscribe(() => this.reload());
   }
 }
