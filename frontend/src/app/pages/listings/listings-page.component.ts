@@ -22,9 +22,22 @@ export class ListingsPageComponent implements OnInit {
     this.api.getFlats().subscribe((res) => this.flats = res);
   }
 
-  imageUrl(url?: string) {
-    if (!url) { return ''; }
+  imageUrl(url?: string, width = 800): string {
+    if (!url) return '';
+
     const apiBase = environment.apiUrl.replace(/\/api\/?$/, '');
-    return url.startsWith('http') ? url : `${apiBase}${url}`;
+    const resolved = url.startsWith('http')
+      ? url
+      : `${apiBase}${url}`;
+
+    const image = new URL(resolved);
+
+    if (image.hostname === 'images.unsplash.com') {
+      image.searchParams.set('w', String(width));
+      image.searchParams.set('auto', 'format');
+      image.searchParams.set('q', '85');
+    }
+
+    return image.toString();
   }
 }

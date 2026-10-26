@@ -1,0 +1,8 @@
+{
+  "passed": 2,
+  "checks": [
+    "Profile sign-out",
+    "Admin invalid-field focus"
+  ],
+  "uncaughtErrors": []
+}
