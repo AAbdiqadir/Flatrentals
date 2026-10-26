@@ -56,7 +56,7 @@ services:
     build: ./frontend
     image: flatrent-frontend:${APP_VERSION}
     depends_on:
-      - backend
+      - backends
     restart: unless-stopped
 
   caddy:
