@@ -25,6 +25,7 @@ import { AuthResponse } from '../models/types';
 export class AuthService {
   private readonly authState = signal<AuthResponse | null>(null);
   private refreshRequest?: Observable<AuthResponse>;
+  private initializationPromise?: Promise<void>;
 
   readonly user = computed(() => this.authState());
   readonly isLoggedIn = computed(() => !!this.authState()?.token);
@@ -45,11 +46,16 @@ export class AuthService {
     }
   }
 
-  async initialize(): Promise<void> {
+  initialize(): Promise<void> {
+    // Startup and route guards share one restoration attempt, even after it ends.
+    return this.initializationPromise ??= this.restoreSession();
+  }
+
+  private async restoreSession(): Promise<void> {
     try {
       await firstValueFrom(this.refreshSession());
     } catch {
-      // No session or an unavailable API should not block startup.
+      // A missing session or unavailable API leaves the visitor signed out.
     }
   }
 
