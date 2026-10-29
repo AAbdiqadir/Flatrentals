@@ -19,11 +19,13 @@ export const appConfig: ApplicationConfig = {
     provideClientHydration(),
     provideHttpClient(withInterceptors([authInterceptor])),
     {
-    provide: APP_INITIALIZER,
-    multi: true,
-    deps: [AuthService],
-    useFactory: (auth: AuthService) =>
-      () => auth.initialize()
-  },
+      provide: APP_INITIALIZER,
+      multi: true,
+      deps: [AuthService],
+      useFactory: (auth: AuthService) => () => {
+        // Start restoration without making public-page rendering wait for it.
+        void auth.initialize();
+      },
+    },
   ],
 };
