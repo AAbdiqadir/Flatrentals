@@ -3,113 +3,22 @@ using bckend.Data;
 using bckend.Models;
 using bckend.Options;
 using bckend.Services;
+using bckend.Extensions;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
-{
-    options.SwaggerDoc("v1", new OpenApiInfo { Title = "Flat Rental API", Version = "v1" });
 
-    var securityScheme = new OpenApiSecurityScheme
-    {
-        Name = "Authorization",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "JWT",
-        In = ParameterLocation.Header,
-        Description = "Enter JWT Bearer token",
-        Reference = new OpenApiReference
-        {
-            Type = ReferenceType.SecurityScheme,
-            Id = JwtBearerDefaults.AuthenticationScheme
-        }
-    };
+builder.Services.AddApplicationServices(builder.Configuration);
+builder.Services.AddIdentityServiceExtentions(builder.Configuration);
 
-    options.AddSecurityDefinition(JwtBearerDefaults.AuthenticationScheme, securityScheme);
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        { securityScheme, [] }
-    });
-});
-
-// Configure PostgreSQL database context and Identity
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection"),
-        postgresOptions => postgresOptions.EnableRetryOnFailure()));
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-    {
-        options.Password.RequireDigit = true;
-        options.Password.RequireLowercase = true;
-        options.Password.RequireUppercase = true;
-        options.Password.RequireNonAlphanumeric = false;
-        options.Password.RequiredLength = 6;
-    })
-    .AddEntityFrameworkStores<AppDbContext>()
-    .AddDefaultTokenProviders();
-
-var jwtKey = builder.Configuration["Jwt:Key"] ?? throw new InvalidOperationException("Missing Jwt:Key in appsettings.");
-var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey));
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateLifetime = true,
-        ValidateIssuerSigningKey = true,
-        ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        ValidAudience = builder.Configuration["Jwt:Audience"],
-        IssuerSigningKey = signingKey,
-        ClockSkew = TimeSpan.Zero
-    };
-});
-
-builder.Services.AddAuthorization();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy("frontend", policy =>
-    {
-        policy
-            .WithOrigins("http://localhost:4200")
-            .AllowAnyHeader()
-            .AllowAnyMethod()
-            .AllowCredentials();
-    });
-});
-
-builder.Services.AddHealthChecks()
-    .AddDbContextCheck<AppDbContext>("database", tags: ["ready"]);
-builder.Services.AddScoped<JwtTokenService>();
-builder.Services.AddScoped<SeedService>();
-builder.Services.AddScoped<AuthSessionService>();
-builder.Services.Configure<CompreFaceOptions>(builder.Configuration.GetSection("CompreFace"));
-builder.Services.AddHttpClient<IFaceRecognitionService, CompreFaceRecognitionService>();
-builder.Services.AddProblemDetails();
-
-builder.Services.AddStackExchangeRedisCache(options =>
-{
-    options.Configuration =
-        builder.Configuration.GetConnectionString("Redis")
-        ?? throw new InvalidOperationException("Missing Redis connection.");
-
-    options.InstanceName = "FlatRentals:";
-});
 var app = builder.Build();
 
 app.MapHealthChecks("/health/live", new HealthCheckOptions
