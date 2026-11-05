@@ -75,9 +75,14 @@ DTOs/
  Face/
   FaceEnrollRequestDto.cs
   FaceLoginRequestDto.cs
- Flats/FlatDtos.cs
+ Flats/
+  FlatDtos.cs
+  flatimageDTO.cs
  Messages/MessageDtos.cs
  Users/UserDtos.cs
+Extensions/
+ ApplicationServicesExtension.cs
+ IdentityServicesExtention.cs
 Filters/SessionRequestAtribute.cs
 helpers/cloudinarysettings.cs
 Interfaces/IImageStorage.cs
@@ -86,6 +91,8 @@ Migrations/
  20260930123217_InitialPostgres.Designer.cs
  20261016181144_AddRefreshTokens.cs
  20261016181144_AddRefreshTokens.Designer.cs
+ 20261102140854_AddCloudinaryPhotoId.cs
+ 20261102140854_AddCloudinaryPhotoId.Designer.cs
  AppDbContextModelSnapshot.cs
 Models/
  ApplicationUser.cs
@@ -106,6 +113,7 @@ Services/
  AuthSessionService.cs
  CompreFaceRecognitionService.cs
  IFaceRecognitionService.cs
+ ImageStorage.cs
  JwtTokenService.cs
  SeedService.cs
 Program.cs
@@ -117,8 +125,8 @@ Microsoft.NETCore.App.Ref
 
 [metadataReferences]
 <NUGET>/
- automapper.extensions.microsoft.dependencyinjection/12.0.1/lib/netstandard2.1/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
  automapper/16.2.0/lib/net8.0/AutoMapper.dll
+ cloudinarydotnet/1.29.3/lib/netstandard2.0/CloudinaryDotNet.dll
  microsoft.aspnetcore.authentication.jwtbearer/8.0.8/lib/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
  microsoft.aspnetcore.identity.entityframeworkcore/8.0.8/lib/net8.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
  microsoft.aspnetcore.openapi/8.0.8/lib/net8.0/Microsoft.AspNetCore.OpenApi.dll
@@ -138,6 +146,7 @@ Microsoft.NETCore.App.Ref
  microsoft.identitymodel.protocols/7.1.2/lib/net8.0/Microsoft.IdentityModel.Protocols.dll
  microsoft.identitymodel.tokens/8.14.0/lib/net8.0/Microsoft.IdentityModel.Tokens.dll
  microsoft.openapi/1.6.14/lib/netstandard2.0/Microsoft.OpenApi.dll
+ newtonsoft.json/13.0.3/lib/net6.0/Newtonsoft.Json.dll
  npgsql.entityframeworkcore.postgresql/8.0.8/lib/net8.0/Npgsql.EntityFrameworkCore.PostgreSQL.dll
  npgsql/8.0.4/lib/net8.0/Npgsql.dll
  pipelines.sockets.unofficial/2.2.8/lib/net5.0/Pipelines.Sockets.Unofficial.dll

@@ -7,17 +7,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 using Microsoft.Extensions.Caching.Distributed;
+using bckend.Interfaces;
 namespace bckend.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
 public class FlatsController(AppDbContext dbContext, 
             IWebHostEnvironment environment,
+            IImageStorage imagestorage,
             IDistributedCache cache) : ControllerBase
 {
     private const string FlatsCacheKey = "flats:all:v1";
     [HttpGet]
     [AllowAnonymous]
+
 
     public async Task<ActionResult<IEnumerable<FlatResponseDto>>> GetAll()
     {
@@ -93,7 +96,7 @@ public class FlatsController(AppDbContext dbContext,
 
     [HttpPost]
     [Authorize(Roles = "Owner,Admin")]
-    public async Task<ActionResult<FlatResponseDto>> Create([FromForm] FlatFormRequestDto request, [FromForm] List<IFormFile>? images)
+    public async Task<ActionResult<FlatResponseDto>> Create([FromForm] FlatFormRequestDto request, [FromForm] IFormFile? image)
     {
         var currentUserId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
         var isAdmin = User.IsInRole("Admin");
@@ -112,10 +115,23 @@ public class FlatsController(AppDbContext dbContext,
             CreatedAt = DateTime.UtcNow
         };
 
-        if (images is { Count: > 0 })
+
+
+        if (image is not null && image.Length > 0)
         {
-            flat.Images = await SaveImages(images);
+        
+            var result = await imagestorage.AddPhotoAsync(image);
+    
+            if (result.Error != null) BadRequest(result.Error.Message); 
+
+            var flatImage = new FlatImage
+            {
+                Url = result.SecureUrl.AbsoluteUri,
+                photoId = result.PublicId,
+            };
+            flat.Images.Add(flatImage);
         }
+
 
         dbContext.Flats.Add(flat);
         await dbContext.SaveChangesAsync();
@@ -152,6 +168,7 @@ public class FlatsController(AppDbContext dbContext,
         if (images is { Count: > 0 })
         {
             dbContext.FlatImages.RemoveRange(flat.Images);
+
             flat.Images = await SaveImages(images);
         }
 
