@@ -330,6 +330,9 @@ namespace bckend.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("photoId")
+                        .HasColumnType("text");
+
                     b.HasKey("Id");
 
                     b.HasIndex("FlatId");

@@ -1,0 +1,17 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "frontend/src/app/pages/listings/listings-page.component.html"
+        ],
+        "createdAt": "2026-10-29T11:36:57.981Z",
+        "reason": "Codex: this Angular NgOptimizedImage element binds [ngSrc] to a real listing image URL; the directive sets src at runtime, as confirmed in the installed Angular 17 source."
+      }
+    ]
+  }
+}

@@ -1,10 +1,9 @@
+using CloudinaryDotNet.Actions;
+
+namespace bckend.Interfaces;
 public interface IImageStorage
 {
-    Task<IReadOnlyList<string>> SaveAsync(
-        IReadOnlyCollection<IFormFile> images,
-        CancellationToken cancellationToken);
-
-    Task DeleteAsync(
-        IEnumerable<string> imageUrls,
-        CancellationToken cancellationToken);
+    Task<ImageUploadResult> AddPhotoAsync(IFormFile file);
+    
+    Task<DeletionResult> DeletePhotoAsync(string publicId);
 }
